@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,6 +17,10 @@ class Settings(BaseSettings):
     postgres_password: str = "local_dev_password"
 
     qdrant_url: str = "http://localhost:6333"
+
+    # Document upload configuration
+    max_upload_size_bytes: int = 10 * 1024 * 1024
+    upload_storage_dir: Path = Path("data/raw")
 
     model_config = SettingsConfigDict(
         env_file=".env",
