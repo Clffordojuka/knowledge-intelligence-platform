@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.api.routes.documents import router as documents_router
 from app.core.config import settings
 
 app = FastAPI(
@@ -7,6 +8,8 @@ app = FastAPI(
     description="An AI-powered knowledge intelligence platform.",
     version="0.1.0",
 )
+
+app.include_router(documents_router)
 
 
 @app.get("/health", tags=["Health"])
