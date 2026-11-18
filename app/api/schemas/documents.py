@@ -12,6 +12,7 @@ class DocumentResponse(BaseModel):
     content_type: str
     file_size_bytes: int
     status: str
+    indexing_status: str
     created_at: datetime
     chunk_count: int = 0
 

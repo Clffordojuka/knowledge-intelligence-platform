@@ -1,4 +1,6 @@
 from pathlib import Path
+from types import SimpleNamespace
+from uuid import UUID
 
 import pytest
 from fastapi.testclient import TestClient
@@ -151,3 +153,71 @@ def test_upload_oversized_file_returns_payload_too_large(
 
     assert response.status_code == 413
     assert list(tmp_path.iterdir()) == []
+
+
+def test_upload_indexing_status(client, db_session, monkeypatch):
+    def mock_index_document(db, document_id, client=None):
+        document = db.get(Document, document_id)
+        document.indexing_status = "completed"
+        db.commit()
+
+        chunks = db.scalars(select(Chunk).where(Chunk.document_id == document_id)).all()
+
+        return SimpleNamespace(
+            document_id=document_id,
+            indexed_chunks=len(chunks),
+            collection_name="test_collection",
+        )
+
+    monkeypatch.setattr(
+        "app.api.routes.documents.index_document",
+        mock_index_document,
+    )
+
+    response = client.post(
+        "/documents",
+        files={
+            "file": (
+                "indexable.txt",
+                b"Document to be indexed.",
+                "text/plain",
+            )
+        },
+    )
+
+    assert response.status_code == 201
+
+    data = response.json()
+    document = db_session.get(Document, UUID(data["id"]))
+
+    assert data["indexing_status"] == "completed"
+    assert document.indexing_status == "completed"
+
+
+def test_retry_document_indexing(client, db_session):
+    upload_response = client.post(
+        "/documents",
+        files={
+            "file": (
+                "retry_policy.txt",
+                b"Policy content for indexing retry.",
+                "text/plain",
+            )
+        },
+    )
+
+    assert upload_response.status_code == 201
+
+    document_id = UUID(upload_response.json()["id"])
+
+    document = db_session.get(Document, document_id)
+    assert document is not None
+
+    document.indexing_status = "failed"
+    db_session.commit()
+
+    retry_response = client.post(f"/documents/{document_id}/index")
+
+    assert retry_response.status_code == 200
+    assert retry_response.json()["indexing_status"] == "completed"
+    assert retry_response.json()["status"] == "completed"

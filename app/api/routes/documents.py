@@ -1,10 +1,12 @@
 from pathlib import Path
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app.api.schemas.documents import DocumentResponse
 from app.database.dependencies import get_db
+from app.database.models import Document
 from app.ingestion.extractors.base import DocumentExtractionError
 from app.ingestion.services.document_service import (
     DuplicateDocumentError,
@@ -19,6 +21,7 @@ from app.ingestion.services.storage import (
     UploadTooLargeError,
     store_upload,
 )
+from app.vector_store.indexing import IndexingError, index_document
 
 router = APIRouter(
     prefix="/documents",
@@ -35,7 +38,7 @@ async def upload_document(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ) -> DocumentResponse:
-    """Upload, process, and persist a PDF or TXT document."""
+    """Upload, process, and index a PDF or TXT document."""
 
     try:
         stored_file = await store_upload(file)
@@ -83,6 +86,53 @@ async def upload_document(
             },
         ) from exc
 
+    try:
+        index_document(
+            db=db,
+            document_id=document.id,
+        )
+
+    except IndexingError:
+        # Processing succeeded, but vector indexing failed.
+        # index_document() records indexing_status="failed".
+        pass
+
     response = DocumentResponse.model_validate(document)
 
     return response.model_copy(update={"chunk_count": len(chunks)})
+
+
+@router.post(
+    "/{document_id}/index",
+    response_model=DocumentResponse,
+    status_code=status.HTTP_200_OK,
+)
+def retry_document_indexing(
+    document_id: UUID,
+    db: Session = Depends(get_db),
+) -> DocumentResponse:
+    """Retry vector indexing for an already processed document."""
+
+    document = db.get(Document, document_id)
+
+    if document is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document not found.",
+        )
+
+    try:
+        result = index_document(
+            db=db,
+            document_id=document_id,
+        )
+
+    except IndexingError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        ) from exc
+
+    response = DocumentResponse.model_validate(document)
+
+    return response.model_copy(update={"chunk_count": result.indexed_chunks})

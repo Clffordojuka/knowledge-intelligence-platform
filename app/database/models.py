@@ -33,6 +33,10 @@ class Document(Base):
             "file_size_bytes > 0",
             name="ck_documents_file_size_positive",
         ),
+        CheckConstraint(
+            "indexing_status IN ('pending', 'processing', 'completed', 'failed')",
+            name="ck_documents_indexing_status",
+        ),
         Index("ix_documents_status", "status"),
     )
 
@@ -62,6 +66,13 @@ class Document(Base):
     )
 
     status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="pending",
+        server_default="pending",
+    )
+
+    indexing_status: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
         default="pending",
