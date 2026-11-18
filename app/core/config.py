@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     # Embedding configuration
     embedding_model_name: str = "BAAI/bge-small-en-v1.5"
     embedding_batch_size: int = 32
+    embedding_dimension: int = 384
 
     # Vector database configuration
     qdrant_collection_name: str = "kip_document_chunks"
