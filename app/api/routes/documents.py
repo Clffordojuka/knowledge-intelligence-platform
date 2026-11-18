@@ -5,9 +5,14 @@ from sqlalchemy.orm import Session
 
 from app.api.schemas.documents import DocumentResponse
 from app.database.dependencies import get_db
+from app.ingestion.extractors.base import DocumentExtractionError
 from app.ingestion.services.document_service import (
     DuplicateDocumentError,
     persist_document,
+)
+from app.ingestion.services.processing_service import (
+    DocumentProcessingError,
+    process_document,
 )
 from app.ingestion.services.storage import (
     InvalidUploadError,
@@ -30,7 +35,7 @@ async def upload_document(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ) -> DocumentResponse:
-    """Upload a PDF or TXT document and persist its metadata."""
+    """Upload, process, and persist a PDF or TXT document."""
 
     try:
         stored_file = await store_upload(file)
@@ -62,4 +67,22 @@ async def upload_document(
             detail=str(exc),
         ) from exc
 
-    return document
+    try:
+        chunks = process_document(
+            db=db,
+            document_id=document.id,
+        )
+
+    except (DocumentExtractionError, DocumentProcessingError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={
+                "message": "Document was uploaded but processing failed.",
+                "document_id": str(document.id),
+                "error": str(exc),
+            },
+        ) from exc
+
+    response = DocumentResponse.model_validate(document)
+
+    return response.model_copy(update={"chunk_count": len(chunks)})

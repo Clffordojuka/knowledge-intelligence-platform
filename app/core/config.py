@@ -16,6 +16,13 @@ class Settings(BaseSettings):
     postgres_user: str = "kip_user"
     postgres_password: str = "local_dev_password"
 
+    # Embedding configuration
+    embedding_model_name: str = "BAAI/bge-small-en-v1.5"
+    embedding_batch_size: int = 32
+
+    # Vector database configuration
+    qdrant_collection_name: str = "kip_document_chunks"
+
     qdrant_url: str = "http://localhost:6333"
 
     # Document upload configuration

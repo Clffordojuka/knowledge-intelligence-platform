@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict
 
 
 class DocumentResponse(BaseModel):
-    """Public response representation of an uploaded document."""
+    """Public response representation of an ingested document."""
 
     id: UUID
     filename: str
@@ -13,5 +13,6 @@ class DocumentResponse(BaseModel):
     file_size_bytes: int
     status: str
     created_at: datetime
+    chunk_count: int = 0
 
     model_config = ConfigDict(from_attributes=True)

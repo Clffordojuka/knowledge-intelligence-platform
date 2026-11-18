@@ -1,4 +1,3 @@
-
 import argparse
 from uuid import UUID
 
@@ -14,9 +13,7 @@ def main(document_id: UUID) -> None:
         document = db.get(Document, document_id)
 
         if document is None:
-            raise SystemExit(
-                f"Document {document_id} was not found."
-            )
+            raise SystemExit(f"Document {document_id} was not found.")
 
         print("\nDOCUMENT BEFORE PROCESSING")
         print(f"ID: {document.id}")

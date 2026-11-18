@@ -11,3 +11,7 @@ pypdf>=5.0,<7.0
 sqlalchemy>=2.0,<3.0
 psycopg[binary]>=3.2,<4.0
 alembic>=1.14,<2.0
+
+# Embeddings and vector search
+sentence-transformers>=3.3,<6.0
+qdrant-client>=1.12,<2.0

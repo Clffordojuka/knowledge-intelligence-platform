@@ -9,7 +9,7 @@ from sqlalchemy.pool import StaticPool
 from app.core.config import settings
 from app.database.base import Base
 from app.database.dependencies import get_db
-from app.database.models import Document
+from app.database.models import Chunk, Document
 from app.main import app
 
 
@@ -50,7 +50,7 @@ def client(db_session, tmp_path, monkeypatch):
     app.dependency_overrides.pop(get_db, None)
 
 
-def test_upload_valid_txt_document(client, db_session, tmp_path):
+def test_upload_valid_txt_document(client, db_session):
     content = b"Internal credit policy document."
 
     response = client.post(
@@ -71,7 +71,8 @@ def test_upload_valid_txt_document(client, db_session, tmp_path):
     assert data["filename"] == "credit_policy.txt"
     assert data["content_type"] == "text/plain"
     assert data["file_size_bytes"] == len(content)
-    assert data["status"] == "pending"
+    assert data["status"] == "completed"
+    assert data["chunk_count"] >= 1
     assert "id" in data
     assert "created_at" in data
 
@@ -80,8 +81,16 @@ def test_upload_valid_txt_document(client, db_session, tmp_path):
     )
 
     assert document is not None
+    assert document.status == "completed"
     assert Path(document.storage_path).exists()
     assert Path(document.storage_path).read_bytes() == content
+
+    persisted_chunks = db_session.scalars(
+        select(Chunk).where(Chunk.document_id == document.id)
+    ).all()
+
+    assert len(persisted_chunks) == data["chunk_count"]
+    assert persisted_chunks[0].content == "Internal credit policy document."
 
 
 def test_upload_duplicate_document_returns_conflict(client, tmp_path):
