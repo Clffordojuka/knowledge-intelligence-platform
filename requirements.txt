@@ -15,3 +15,4 @@ alembic>=1.14,<2.0
 # Embeddings and vector search
 sentence-transformers>=3.3,<6.0
 qdrant-client>=1.12,<2.0
+rank-bm25>=0.2.2,<1.0
