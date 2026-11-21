@@ -1,0 +1,309 @@
+{
+  "dataset_name": "knowledge_intelligence_credit_policy_retrieval",
+  "dataset_version": "1.0",
+  "document_id": "312f05c2-e4b2-4fa1-819c-37592005712b",
+  "evaluation_cutoff": 5,
+  "query_count": 5,
+  "aggregate_metrics": {
+    "semantic": {
+      "precision_at_5": 0.24000000000000002,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0
+    },
+    "bm25": {
+      "precision_at_5": 0.2,
+      "recall_at_5": 0.9,
+      "mrr": 0.8666666666666667,
+      "ndcg_at_5": 0.8226294385530917
+    },
+    "hybrid": {
+      "precision_at_5": 0.24000000000000002,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9839441578296375
+    }
+  },
+  "query_results": [
+    {
+      "query_id": "q001",
+      "query": "What identification documents must a borrower provide before a credit application can proceed?",
+      "topic": "identity_verification",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "2377f6f8-6b43-44e0-be13-5d6c5d50edc9",
+            "74b9b5be-9aea-4b8a-bcfb-6c3619b17a4c",
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "d12f09fd-781d-4a2c-bbe5-a49a1a9b7ad7",
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "2377f6f8-6b43-44e0-be13-5d6c5d50edc9",
+            "d12f09fd-781d-4a2c-bbe5-a49a1a9b7ad7",
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "120d3ef6-5190-4307-91e7-63d895146c7a",
+            "74b9b5be-9aea-4b8a-bcfb-6c3619b17a4c"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "2377f6f8-6b43-44e0-be13-5d6c5d50edc9",
+            "d12f09fd-781d-4a2c-bbe5-a49a1a9b7ad7",
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "74b9b5be-9aea-4b8a-bcfb-6c3619b17a4c",
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q002",
+      "query": "How does the institution determine whether a borrower can afford the proposed loan repayments?",
+      "topic": "repayment_capacity",
+      "relevant_chunk_count": 2,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6",
+            "e6510839-96cc-420a-8ba0-dbb827d953d1",
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "120d3ef6-5190-4307-91e7-63d895146c7a"
+          ],
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6",
+            "2377f6f8-6b43-44e0-be13-5d6c5d50edc9",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "120d3ef6-5190-4307-91e7-63d895146c7a",
+            "eba223ca-a0a6-4bc6-8938-bd2fb866bd6e"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 0.5,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.6131471927654584
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "e6510839-96cc-420a-8ba0-dbb827d953d1",
+            "2377f6f8-6b43-44e0-be13-5d6c5d50edc9",
+            "120d3ef6-5190-4307-91e7-63d895146c7a"
+          ],
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.9197207891481876
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q003",
+      "query": "What repayment problems should the credit officer identify when reviewing an applicant's credit history?",
+      "topic": "credit_history",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6",
+            "e6510839-96cc-420a-8ba0-dbb827d953d1",
+            "d12f09fd-781d-4a2c-bbe5-a49a1a9b7ad7"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "e6510839-96cc-420a-8ba0-dbb827d953d1",
+            "120d3ef6-5190-4307-91e7-63d895146c7a",
+            "74b9b5be-9aea-4b8a-bcfb-6c3619b17a4c",
+            "81e78175-6c35-44ea-83dc-f007c3668506"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "e6510839-96cc-420a-8ba0-dbb827d953d1",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6",
+            "74b9b5be-9aea-4b8a-bcfb-6c3619b17a4c"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q004",
+      "query": "Who must review a loan application when a mandatory credit requirement cannot be satisfied?",
+      "topic": "exception_escalation",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "120d3ef6-5190-4307-91e7-63d895146c7a",
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "e6510839-96cc-420a-8ba0-dbb827d953d1",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "120d3ef6-5190-4307-91e7-63d895146c7a",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "e6510839-96cc-420a-8ba0-dbb827d953d1",
+            "d12f09fd-781d-4a2c-bbe5-a49a1a9b7ad7",
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "120d3ef6-5190-4307-91e7-63d895146c7a",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "e6510839-96cc-420a-8ba0-dbb827d953d1",
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "d12f09fd-781d-4a2c-bbe5-a49a1a9b7ad7"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q005",
+      "query": "What information must be retained to support an audit of a credit decision?",
+      "topic": "auditability",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "d12f09fd-781d-4a2c-bbe5-a49a1a9b7ad7",
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "74b9b5be-9aea-4b8a-bcfb-6c3619b17a4c",
+            "d71f81cc-c5f9-4229-86ae-8485a88988e6"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "77a7152a-70a2-4158-b2d1-01a83f246d46",
+            "120d3ef6-5190-4307-91e7-63d895146c7a",
+            "d12f09fd-781d-4a2c-bbe5-a49a1a9b7ad7",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "e682ab90-3339-4cc8-bbab-c95897cd469f"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.3333333333333333,
+            "ndcg_at_5": 0.5
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "d12f09fd-781d-4a2c-bbe5-a49a1a9b7ad7",
+            "77a7152a-70a2-4158-b2d1-01a83f246d46",
+            "e682ab90-3339-4cc8-bbab-c95897cd469f",
+            "81e78175-6c35-44ea-83dc-f007c3668506",
+            "120d3ef6-5190-4307-91e7-63d895146c7a"
+          ],
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    }
+  ]
+}

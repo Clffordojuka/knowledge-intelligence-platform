@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     embedding_batch_size: int = 32
     embedding_dimension: int = 384
 
+    # Reranking configuration
+    reranker_model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    reranker_batch_size: int = 16
+    reranker_max_length: int = 512
+
     # Vector database configuration
     qdrant_collection_name: str = "kip_document_chunks"
 

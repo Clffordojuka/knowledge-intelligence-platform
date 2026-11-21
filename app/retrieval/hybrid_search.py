@@ -1,3 +1,7 @@
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from qdrant_client import QdrantClient
@@ -12,10 +16,17 @@ from app.retrieval.fusion import (
     HybridSearchResult,
     reciprocal_rank_fusion,
 )
+from app.retrieval.reranking import (
+    RerankingError,
+    rerank_candidates,
+)
 from app.retrieval.semantic_search import (
     RetrievalError,
     search_similar_chunks,
 )
+
+if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder
 
 
 class HybridRetrievalError(Exception):
@@ -30,8 +41,10 @@ def search_hybrid_chunks(
     candidate_limit: int | None = None,
     client: QdrantClient | None = None,
     embedding_service: EmbeddingService | None = None,
+    rerank: bool = False,
+    reranker: CrossEncoder | None = None,
 ) -> list[HybridSearchResult]:
-    """Retrieve and fuse semantic and keyword search results."""
+    """Retrieve, fuse, and optionally rerank semantic and keyword results."""
 
     if not isinstance(query, str) or not query.strip():
         raise ValueError("Search query must be a non-empty string.")
@@ -52,6 +65,9 @@ def search_hybrid_chunks(
     if candidate_limit < limit:
         raise ValueError("Candidate limit cannot be smaller than result limit.")
 
+    if not isinstance(rerank, bool):
+        raise ValueError("Rerank must be a boolean.")
+
     try:
         semantic_results = search_similar_chunks(
             query=query,
@@ -68,18 +84,31 @@ def search_hybrid_chunks(
             document_id=document_id,
         )
 
-        return reciprocal_rank_fusion(
+        fused_results = reciprocal_rank_fusion(
             semantic_results=semantic_results,
             bm25_results=bm25_results,
-            limit=limit,
+            limit=candidate_limit if rerank else limit,
         )
+
+        if rerank:
+            return rerank_candidates(
+                query=query,
+                candidates=fused_results,
+                top_k=limit,
+                reranker=reranker,
+            )
+
+        return fused_results
 
     except (
         RetrievalError,
         BM25RetrievalError,
         FusionError,
+        RerankingError,
     ) as exc:
-        raise HybridRetrievalError("Hybrid retrieval could not be completed.") from exc
+        raise HybridRetrievalError(
+            "Hybrid retrieval could not be completed."
+        ) from exc
 
     except Exception as exc:
         raise HybridRetrievalError(

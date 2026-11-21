@@ -1,0 +1,51 @@
+
+{
+  "dataset_name": "knowledge_intelligence_credit_policy_retrieval",
+  "version": "1.0",
+  "description": "Synthetic credit-policy questions and manually defined relevant evidence for evaluating semantic, BM25, and hybrid retrieval.",
+  "corpus_file": "benchmark_policy.txt",
+  "relevance_definition": "A chunk is relevant when it contains the specified evidence phrase and provides information needed to answer the corresponding query.",
+  "queries": [
+    {
+      "query_id": "q001",
+      "query": "What identification documents must a borrower provide before a credit application can proceed?",
+      "relevant_evidence": [
+        "valid government-issued photo identification"
+      ],
+      "topic": "identity_verification"
+    },
+    {
+      "query_id": "q002",
+      "query": "How does the institution determine whether a borrower can afford the proposed loan repayments?",
+      "relevant_evidence": [
+        "monthly disposable income after existing debt obligations",
+        "maximum permitted debt-service ratio is 40 percent"
+      ],
+      "topic": "repayment_capacity"
+    },
+    {
+      "query_id": "q003",
+      "query": "What repayment problems should the credit officer identify when reviewing an applicant's credit history?",
+      "relevant_evidence": [
+        "unresolved defaults and delinquent repayment accounts"
+      ],
+      "topic": "credit_history"
+    },
+    {
+      "query_id": "q004",
+      "query": "Who must review a loan application when a mandatory credit requirement cannot be satisfied?",
+      "relevant_evidence": [
+        "escalated to the senior credit approval committee"
+      ],
+      "topic": "exception_escalation"
+    },
+    {
+      "query_id": "q005",
+      "query": "What information must be retained to support an audit of a credit decision?",
+      "relevant_evidence": [
+        "identity verification findings, repayment capacity calculations, credit-history review outcomes"
+      ],
+      "topic": "auditability"
+    }
+  ]
+}
