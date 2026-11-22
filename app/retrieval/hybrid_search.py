@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -43,6 +42,7 @@ def search_hybrid_chunks(
     embedding_service: EmbeddingService | None = None,
     rerank: bool = False,
     reranker: CrossEncoder | None = None,
+    document_ids: list[UUID] | None = None,
 ) -> list[HybridSearchResult]:
     """Retrieve, fuse, and optionally rerank semantic and keyword results."""
 
@@ -63,10 +63,30 @@ def search_hybrid_chunks(
         raise ValueError("Candidate limit must be a positive integer.")
 
     if candidate_limit < limit:
-        raise ValueError("Candidate limit cannot be smaller than result limit.")
+        raise ValueError(
+            "Candidate limit cannot be smaller than result limit."
+        )
 
     if not isinstance(rerank, bool):
         raise ValueError("Rerank must be a boolean.")
+
+    if document_id is not None and not isinstance(document_id, UUID):
+        raise ValueError("Document ID must be a UUID.")
+
+    if document_id is not None and document_ids is not None:
+        raise ValueError(
+            "Specify either document_id or document_ids, not both."
+        )
+
+    if document_ids is not None:
+        if not isinstance(document_ids, list) or not document_ids:
+            raise ValueError("Document IDs must be a non-empty list.")
+
+        if any(not isinstance(item, UUID) for item in document_ids):
+            raise ValueError("Every document ID must be a UUID.")
+
+        if len(document_ids) != len(set(document_ids)):
+            raise ValueError("Document IDs must not contain duplicates.")
 
     try:
         semantic_results = search_similar_chunks(
@@ -75,6 +95,7 @@ def search_hybrid_chunks(
             document_id=document_id,
             client=client,
             embedding_service=embedding_service,
+            document_ids=document_ids,
         )
 
         bm25_results = search_bm25(
@@ -82,6 +103,7 @@ def search_hybrid_chunks(
             query=query,
             limit=candidate_limit,
             document_id=document_id,
+            document_ids=document_ids,
         )
 
         fused_results = reciprocal_rank_fusion(

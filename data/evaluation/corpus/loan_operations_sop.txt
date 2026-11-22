@@ -1,0 +1,25 @@
+LOAN OPERATIONS STANDARD OPERATING PROCEDURE
+
+1. Application Registration
+Every loan application must be assigned a unique application reference.
+Operations personnel must record the applicant's details, submission date,
+requested loan amount, and application status.
+
+2. Document Verification
+Operations personnel must confirm that all required application documents
+have been received. Identity documents must be checked for completeness and
+consistency with the information submitted by the applicant.
+
+3. Application Processing
+Applications with missing documentation must be returned for clarification.
+Applications with complete documentation may proceed to credit assessment.
+The application status must be updated at every major processing stage.
+
+4. Loan Disbursement
+Approved loan applications may proceed to disbursement after all required
+approval conditions have been satisfied. Disbursement records must include
+the approved amount, transaction reference, and disbursement date.
+
+5. Record Retention
+Application records and supporting documents must be retained in accordance
+with the institution's records-management requirements.

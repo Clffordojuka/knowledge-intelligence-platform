@@ -1,9 +1,16 @@
+
 from dataclasses import dataclass
 from math import isfinite
 from uuid import UUID
 
 from qdrant_client import QdrantClient
-from qdrant_client.models import FieldCondition, Filter, MatchValue, ScoredPoint
+from qdrant_client.models import (
+    FieldCondition,
+    Filter,
+    MatchAny,
+    MatchValue,
+    ScoredPoint,
+)
 
 from app.core.config import settings
 from app.embeddings.service import (
@@ -31,17 +38,35 @@ class SearchResult:
     page_end: int | None
 
 
-def _build_document_filter(document_id: UUID) -> Filter:
-    """Restrict retrieval to chunks belonging to one document."""
+def _build_document_filter(
+    document_id: UUID | None = None,
+    document_ids: list[UUID] | None = None,
+) -> Filter | None:
+    """Restrict retrieval to one or more documents."""
 
-    return Filter(
-        must=[
-            FieldCondition(
-                key="document_id",
-                match=MatchValue(value=str(document_id)),
-            )
-        ]
-    )
+    if document_id is not None:
+        return Filter(
+            must=[
+                FieldCondition(
+                    key="document_id",
+                    match=MatchValue(value=str(document_id)),
+                )
+            ]
+        )
+
+    if document_ids is not None:
+        return Filter(
+            must=[
+                FieldCondition(
+                    key="document_id",
+                    match=MatchAny(
+                        any=[str(document_id) for document_id in document_ids]
+                    ),
+                )
+            ]
+        )
+
+    return None
 
 
 def _parse_search_result(point: ScoredPoint) -> SearchResult:
@@ -93,6 +118,7 @@ def search_similar_chunks(
     score_threshold: float | None = None,
     client: QdrantClient | None = None,
     embedding_service: EmbeddingService | None = None,
+    document_ids: list[UUID] | None = None,
 ) -> list[SearchResult]:
     """Search Qdrant for semantically similar document chunks."""
 
@@ -102,6 +128,24 @@ def search_similar_chunks(
     if isinstance(limit, bool) or not isinstance(limit, int) or limit <= 0:
         raise ValueError("Search limit must be a positive integer.")
 
+    if document_id is not None and not isinstance(document_id, UUID):
+        raise ValueError("Document ID must be a UUID.")
+
+    if document_id is not None and document_ids is not None:
+        raise ValueError(
+            "Specify either document_id or document_ids, not both."
+        )
+
+    if document_ids is not None:
+        if not isinstance(document_ids, list) or not document_ids:
+            raise ValueError("Document IDs must be a non-empty list.")
+
+        if any(not isinstance(item, UUID) for item in document_ids):
+            raise ValueError("Every document ID must be a UUID.")
+
+        if len(document_ids) != len(set(document_ids)):
+            raise ValueError("Document IDs must not contain duplicates.")
+
     if score_threshold is not None:
         if (
             isinstance(score_threshold, bool)
@@ -110,12 +154,15 @@ def search_similar_chunks(
             or not -1.0 <= score_threshold <= 1.0
         ):
             raise ValueError(
-                "Score threshold must be a finite cosine score between -1.0 and 1.0."
+                "Score threshold must be a finite cosine score "
+                "between -1.0 and 1.0."
             )
 
     try:
         embedder = (
-            get_embedding_service() if embedding_service is None else embedding_service
+            get_embedding_service()
+            if embedding_service is None
+            else embedding_service
         )
 
         query_vector = embedder.embed_query(query.strip())
@@ -126,10 +173,13 @@ def search_similar_chunks(
                 "the configured Qdrant vector dimension."
             )
 
-        qdrant_client = get_qdrant_client() if client is None else client
+        qdrant_client = (
+            get_qdrant_client() if client is None else client
+        )
 
-        query_filter = (
-            _build_document_filter(document_id) if document_id is not None else None
+        query_filter = _build_document_filter(
+            document_id=document_id,
+            document_ids=document_ids,
         )
 
         response = qdrant_client.query_points(
@@ -142,7 +192,10 @@ def search_similar_chunks(
             with_vectors=False,
         )
 
-        return [_parse_search_result(point) for point in response.points]
+        return [
+            _parse_search_result(point)
+            for point in response.points
+        ]
 
     except RetrievalError:
         raise

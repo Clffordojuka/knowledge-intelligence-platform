@@ -1,0 +1,167 @@
+
+{
+  "dataset_name": "knowledge_intelligence_multidocument_retrieval",
+  "version": "2.0",
+  "description": "Multi-document retrieval benchmark covering credit policy, loan operations, risk management, compliance, and unrelated office procedures.",
+  "corpus_files": [
+    "credit_policy.txt",
+    "loan_operations_sop.txt",
+    "risk_management_policy.txt",
+    "compliance_policy.txt",
+    "general_office_procedures.txt"
+  ],
+  "queries": [
+    {
+      "id": "q001",
+      "query": "What identification must a loan applicant provide before a credit application can proceed?",
+      "topic": "borrower_eligibility",
+      "difficulty": "easy",
+      "relevant_evidence": [
+        {
+          "filename": "credit_policy.txt",
+          "phrase": "valid government-issued photo identification"
+        }
+      ]
+    },
+    {
+      "id": "q002",
+      "query": "How does the institution determine whether a borrower can afford loan repayments?",
+      "topic": "repayment_capacity",
+      "difficulty": "medium",
+      "relevant_evidence": [
+        {
+          "filename": "credit_policy.txt",
+          "phrase": "monthly disposable income after existing debt obligations"
+        },
+        {
+          "filename": "credit_policy.txt",
+          "phrase": "maximum permitted debt-service ratio is 40 percent"
+        }
+      ]
+    },
+    {
+      "id": "q003",
+      "query": "Which credit history issues should officers consider when assessing a borrower?",
+      "topic": "credit_history",
+      "difficulty": "easy",
+      "relevant_evidence": [
+        {
+          "filename": "credit_policy.txt",
+          "phrase": "unresolved defaults and delinquent repayment accounts"
+        }
+      ]
+    },
+    {
+      "id": "q004",
+      "query": "Who reviews lending applications that require escalation beyond normal credit approval?",
+      "topic": "approval_escalation",
+      "difficulty": "medium",
+      "relevant_evidence": [
+        {
+          "filename": "risk_management_policy.txt",
+          "phrase": "escalated to the senior credit approval committee"
+        },
+        {
+          "filename": "risk_management_policy.txt",
+          "phrase": "Applications exceeding those limits require approval from the appropriate higher authority"
+        }
+      ]
+    },
+    {
+      "id": "q005",
+      "query": "What records must be retained to demonstrate how a credit assessment decision was reached?",
+      "topic": "auditability",
+      "difficulty": "medium",
+      "relevant_evidence": [
+        {
+          "filename": "compliance_policy.txt",
+          "phrase": "identity verification findings, repayment capacity calculations, and credit-history review outcomes"
+        },
+        {
+          "filename": "compliance_policy.txt",
+          "phrase": "sufficient evidence to reconstruct the decisions made"
+        }
+      ]
+    },
+    {
+      "id": "q006",
+      "query": "What should operations staff do when a loan application is missing required documents?",
+      "topic": "application_processing",
+      "difficulty": "easy",
+      "relevant_evidence": [
+        {
+          "filename": "loan_operations_sop.txt",
+          "phrase": "returned for clarification"
+        },
+        {
+          "filename": "loan_operations_sop.txt",
+          "phrase": "confirm that all required application documents have been received"
+        }
+      ]
+    },
+    {
+      "id": "q007",
+      "query": "How should the institution handle customer activity that may indicate money laundering?",
+      "topic": "anti_money_laundering",
+      "difficulty": "medium",
+      "relevant_evidence": [
+        {
+          "filename": "compliance_policy.txt",
+          "phrase": "indicators of potential money laundering or other suspicious activity"
+        },
+        {
+          "filename": "compliance_policy.txt",
+          "phrase": "established reporting procedures"
+        }
+      ]
+    },
+    {
+      "id": "q008",
+      "query": "What conditions must be met before an approved loan can be disbursed?",
+      "topic": "loan_disbursement",
+      "difficulty": "easy",
+      "relevant_evidence": [
+        {
+          "filename": "loan_operations_sop.txt",
+          "phrase": "all required approval conditions have been satisfied"
+        },
+        {
+          "filename": "loan_operations_sop.txt",
+          "phrase": "approved amount, transaction reference, and disbursement date"
+        }
+      ]
+    },
+    {
+      "id": "q009",
+      "query": "What happens when a loan applicant exceeds the permitted repayment threshold or an officer's approval authority?",
+      "topic": "cross_document_approval_controls",
+      "difficulty": "hard",
+      "relevant_evidence": [
+        {
+          "filename": "credit_policy.txt",
+          "phrase": "without an authorized exception"
+        },
+        {
+          "filename": "risk_management_policy.txt",
+          "phrase": "appropriate higher authority"
+        }
+      ]
+    },
+    {
+      "id": "q010",
+      "query": "How can employees reserve a meeting room, and what information should they provide?",
+      "topic": "general_office_procedures",
+      "difficulty": "easy",
+      "relevant_evidence": [
+        {
+          "filename": "general_office_procedures.txt",
+          "phrase": "meeting title, expected attendance, date, and duration"
+        },
+        {
+          "filename": "general_office_procedures.txt",
+          "phrase": "reserve meeting rooms through the internal scheduling system"
+        }
+      ]
+    }
+  ]
+}

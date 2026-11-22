@@ -42,6 +42,7 @@ def search_bm25(
     query: str,
     limit: int = 5,
     document_id: UUID | None = None,
+    document_ids: list[UUID] | None = None,
 ) -> list[BM25SearchResult]:
     """Retrieve document chunks using BM25 keyword ranking."""
 
@@ -50,6 +51,24 @@ def search_bm25(
 
     if isinstance(limit, bool) or not isinstance(limit, int) or limit <= 0:
         raise ValueError("Search limit must be a positive integer.")
+
+    if document_id is not None and not isinstance(document_id, UUID):
+        raise ValueError("Document ID must be a UUID.")
+
+    if document_id is not None and document_ids is not None:
+        raise ValueError(
+            "Specify either document_id or document_ids, not both."
+        )
+
+    if document_ids is not None:
+        if not isinstance(document_ids, list) or not document_ids:
+            raise ValueError("Document IDs must be a non-empty list.")
+
+        if any(not isinstance(item, UUID) for item in document_ids):
+            raise ValueError("Every document ID must be a UUID.")
+
+        if len(document_ids) != len(set(document_ids)):
+            raise ValueError("Document IDs must not contain duplicates.")
 
     query_tokens = tokenize(query)
 
@@ -64,7 +83,13 @@ def search_bm25(
         )
 
         if document_id is not None:
-            statement = statement.where(Chunk.document_id == document_id)
+            statement = statement.where(
+                Chunk.document_id == document_id
+            )
+        elif document_ids is not None:
+            statement = statement.where(
+                Chunk.document_id.in_(document_ids)
+            )
 
         rows = db.execute(statement).all()
 
@@ -74,18 +99,34 @@ def search_bm25(
         chunks = [row[0] for row in rows]
         filenames = [row[1] for row in rows]
 
-        tokenized_corpus = [tokenize(chunk.content) for chunk in chunks]
+        tokenized_corpus = [
+            tokenize(chunk.content)
+            for chunk in chunks
+        ]
 
         valid_indices = [
-            index for index, tokens in enumerate(tokenized_corpus) if tokens
+            index
+            for index, tokens in enumerate(tokenized_corpus)
+            if tokens
         ]
 
         if not valid_indices:
             return []
 
-        valid_chunks = [chunks[index] for index in valid_indices]
-        valid_filenames = [filenames[index] for index in valid_indices]
-        valid_corpus = [tokenized_corpus[index] for index in valid_indices]
+        valid_chunks = [
+            chunks[index]
+            for index in valid_indices
+        ]
+
+        valid_filenames = [
+            filenames[index]
+            for index in valid_indices
+        ]
+
+        valid_corpus = [
+            tokenized_corpus[index]
+            for index in valid_indices
+        ]
 
         bm25 = BM25Okapi(valid_corpus)
         scores = bm25.get_scores(query_tokens)
@@ -128,4 +169,6 @@ def search_bm25(
         raise
 
     except Exception as exc:
-        raise BM25RetrievalError("BM25 keyword retrieval failed.") from exc
+        raise BM25RetrievalError(
+            "BM25 keyword retrieval failed."
+        ) from exc
