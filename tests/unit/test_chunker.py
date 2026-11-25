@@ -1,3 +1,4 @@
+
 import pytest
 
 from app.ingestion.chunking.chunker import (
@@ -13,10 +14,31 @@ from app.ingestion.extractors.base import (
 def make_extraction(*pages: tuple[int, str]) -> ExtractionResult:
     return ExtractionResult(
         pages=tuple(
-            ExtractedPage(page_number=number, text=text) for number, text in pages
+            ExtractedPage(page_number=number, text=text)
+            for number, text in pages
         ),
         source_format="txt",
     )
+
+
+def make_sectioned_extraction() -> ExtractionResult:
+    return make_extraction(
+        (
+            1,
+            "CREDIT POLICY\n\n"
+            "1. Borrower Eligibility\n"
+            "All applicants must provide valid identification.\n\n"
+            "2. Repayment Capacity\n"
+            "Credit officers must assess disposable income.\n\n"
+            "3. Credit History Review\n"
+            "Credit officers must review unresolved defaults.",
+        )
+    )
+
+
+# ---------------------------------------------------------------------
+# Existing character-based chunking tests
+# ---------------------------------------------------------------------
 
 
 def test_empty_extraction_returns_no_chunks():
@@ -72,7 +94,9 @@ def test_chunk_indices_are_sequential():
         ChunkingConfig(chunk_size=100, chunk_overlap=20),
     )
 
-    assert [chunk.chunk_index for chunk in chunks] == list(range(len(chunks)))
+    assert [chunk.chunk_index for chunk in chunks] == list(
+        range(len(chunks))
+    )
 
 
 def test_chunks_preserve_source_page_provenance():
@@ -104,7 +128,10 @@ def test_large_document_chunks_retain_page_ranges():
     )
 
     assert len(chunks) > 1
-    assert all(1 <= chunk.page_start <= chunk.page_end <= 3 for chunk in chunks)
+    assert all(
+        1 <= chunk.page_start <= chunk.page_end <= 3
+        for chunk in chunks
+    )
 
     assert any(chunk.page_start == 1 for chunk in chunks)
     assert any(chunk.page_end == 3 for chunk in chunks)
@@ -120,7 +147,10 @@ def test_chunk_offsets_match_normalized_document_text():
     normalized_text = "First paragraph.\n\nSecond paragraph."
 
     for chunk in chunks:
-        assert normalized_text[chunk.char_start : chunk.char_end] == chunk.content
+        assert (
+            normalized_text[chunk.char_start:chunk.char_end]
+            == chunk.content
+        )
 
 
 def test_overlapping_chunks_retain_shared_context():
@@ -181,3 +211,193 @@ def test_zero_overlap_is_supported():
         current.char_start >= previous.char_end
         for previous, current in zip(chunks, chunks[1:])
     )
+
+
+# ---------------------------------------------------------------------
+# Section-aware chunking tests
+# ---------------------------------------------------------------------
+
+
+def test_section_aware_strategy_splits_numbered_sections():
+    extraction = make_sectioned_extraction()
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(strategy="section_aware"),
+    )
+
+    assert len(chunks) == 3
+
+    assert "1. Borrower Eligibility" in chunks[0].content
+    assert "2. Repayment Capacity" not in chunks[0].content
+
+    assert "2. Repayment Capacity" in chunks[1].content
+    assert "3. Credit History Review" not in chunks[1].content
+
+    assert "3. Credit History Review" in chunks[2].content
+
+
+def test_document_title_remains_with_first_section():
+    extraction = make_sectioned_extraction()
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(strategy="section_aware"),
+    )
+
+    assert "CREDIT POLICY" in chunks[0].content
+    assert "1. Borrower Eligibility" in chunks[0].content
+
+
+def test_section_boundaries_do_not_create_cross_section_overlap():
+    extraction = make_sectioned_extraction()
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(
+            chunk_size=500,
+            chunk_overlap=50,
+            strategy="section_aware",
+        ),
+    )
+
+    assert len(chunks) == 3
+
+    for previous, current in zip(chunks, chunks[1:]):
+        assert current.char_start >= previous.char_end
+
+
+def test_oversized_section_is_split_with_overlap():
+    long_section = (
+        "Detailed repayment capacity requirements must be reviewed "
+        "before approval. "
+    ) * 25
+
+    extraction = make_extraction(
+        (
+            1,
+            "CREDIT POLICY\n\n"
+            "1. Repayment Capacity\n"
+            f"{long_section}",
+        )
+    )
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(
+            chunk_size=150,
+            chunk_overlap=30,
+            strategy="section_aware",
+        ),
+    )
+
+    assert len(chunks) > 1
+    assert all(len(chunk.content) <= 150 for chunk in chunks)
+
+    assert "1. Repayment Capacity" in chunks[0].content
+
+    for previous, current in zip(chunks, chunks[1:]):
+        assert current.char_start < previous.char_end
+
+
+def test_section_aware_chunk_offsets_match_source_text():
+    text = (
+        "CREDIT POLICY\n\n"
+        "1. Borrower Eligibility\n"
+        "Applicants must provide valid identification.\n\n"
+        "2. Repayment Capacity\n"
+        "Credit officers must assess disposable income."
+    )
+
+    extraction = make_extraction((1, text))
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(strategy="section_aware"),
+    )
+
+    for chunk in chunks:
+        assert text[chunk.char_start:chunk.char_end] == chunk.content
+
+
+def test_section_aware_chunk_indices_are_sequential():
+    extraction = make_sectioned_extraction()
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(strategy="section_aware"),
+    )
+
+    assert [chunk.chunk_index for chunk in chunks] == list(
+        range(len(chunks))
+    )
+
+
+def test_section_aware_preserves_page_provenance():
+    extraction = make_extraction(
+        (
+            1,
+            "CREDIT POLICY\n\n"
+            "1. Borrower Eligibility\n"
+            "Applicants must provide valid identification.",
+        ),
+        (
+            2,
+            "2. Repayment Capacity\n"
+            "Credit officers must assess disposable income.",
+        ),
+    )
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(strategy="section_aware"),
+    )
+
+    assert len(chunks) == 2
+
+    assert chunks[0].page_start == 1
+    assert chunks[0].page_end == 1
+
+    assert chunks[1].page_start == 2
+    assert chunks[1].page_end == 2
+
+
+def test_section_aware_falls_back_without_numbered_headings():
+    extraction = make_extraction(
+        (
+            1,
+            "Credit policy introduction. "
+            "Borrower eligibility must be assessed. " * 20,
+        )
+    )
+
+    character_chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(
+            chunk_size=100,
+            chunk_overlap=20,
+            strategy="character",
+        ),
+    )
+
+    section_chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(
+            chunk_size=100,
+            chunk_overlap=20,
+            strategy="section_aware",
+        ),
+    )
+
+    assert section_chunks == character_chunks
+
+
+def test_invalid_chunking_strategy_is_rejected():
+    with pytest.raises(ValueError, match="strategy"):
+        ChunkingConfig(strategy="invalid")
+
+
+def test_default_strategy_remains_character_based():
+    config = ChunkingConfig()
+
+    assert config.strategy == "character"

@@ -1,0 +1,2843 @@
+{
+  "experiment": {
+    "name": "Retrieval evaluation reliability",
+    "query_instruction": "Represent this sentence for searching relevant passages: ",
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "top_k": 5,
+    "hybrid_candidate_limit": 20,
+    "strategies": [
+      "semantic",
+      "semantic_instructed",
+      "bm25",
+      "hybrid",
+      "hybrid_instructed",
+      "hybrid_reranked"
+    ],
+    "warmup_runs_per_strategy": 1,
+    "measured_trials_per_strategy": 5,
+    "random_seed": 42,
+    "randomized_order": true,
+    "purpose": "Measure retrieval metrics and latency over repeated trials after warm-up, with randomized strategy execution order.",
+    "latency_methodology": "Warm-up calls are excluded. Each measured trial executes every strategy once in a seeded shuffled order. Per-query mean, median, minimum, maximum, and raw trial latencies are recorded. Aggregate metrics are macro-averaged across queries."
+  },
+  "dataset_name": "knowledge_intelligence_multidocument_retrieval",
+  "dataset_version": "2.0",
+  "corpus_documents": {
+    "credit_policy.txt": "4fb81b3a-73c4-4512-8594-461d712a263c",
+    "loan_operations_sop.txt": "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+    "risk_management_policy.txt": "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+    "compliance_policy.txt": "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+    "general_office_procedures.txt": "28ffd589-2c16-4a0c-b4da-bcabdf7e2090"
+  },
+  "corpus_document_count": 5,
+  "evaluation_cutoff": 5,
+  "query_count": 10,
+  "reranker": {
+    "model_name": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "model_load_latency_ms": 8984.647
+  },
+  "aggregate_metrics": {
+    "semantic": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.9,
+      "ndcg_at_5": 0.9101302,
+      "mean_latency_ms": 2097.1301,
+      "median_latency_ms": 2095.682,
+      "overall_trial_mean_latency_ms": 2097.13002,
+      "overall_trial_median_latency_ms": 2094.51
+    },
+    "semantic_instructed": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.85,
+      "ndcg_at_5": 0.8732232,
+      "mean_latency_ms": 2112.817,
+      "median_latency_ms": 2100.1364999999996,
+      "overall_trial_mean_latency_ms": 2112.81706,
+      "overall_trial_median_latency_ms": 2101.6099999999997
+    },
+    "bm25": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.95,
+      "ndcg_at_5": 0.9550651,
+      "mean_latency_ms": 6.0228,
+      "median_latency_ms": 4.7065,
+      "overall_trial_mean_latency_ms": 6.02274,
+      "overall_trial_median_latency_ms": 4.868
+    },
+    "hybrid": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.95,
+      "ndcg_at_5": 0.9550651,
+      "mean_latency_ms": 2104.8522000000003,
+      "median_latency_ms": 2104.9695,
+      "overall_trial_mean_latency_ms": 2104.85222,
+      "overall_trial_median_latency_ms": 2104.9695
+    },
+    "hybrid_instructed": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.95,
+      "ndcg_at_5": 0.9550651,
+      "mean_latency_ms": 2109.7572,
+      "median_latency_ms": 2103.608,
+      "overall_trial_mean_latency_ms": 2109.75728,
+      "overall_trial_median_latency_ms": 2106.6994999999997
+    },
+    "hybrid_reranked": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.95,
+      "ndcg_at_5": 0.963093,
+      "mean_latency_ms": 2544.4598,
+      "median_latency_ms": 2529.5254999999997,
+      "overall_trial_mean_latency_ms": 2544.4597400000002,
+      "overall_trial_median_latency_ms": 2530.0280000000002
+    }
+  },
+  "query_results": [
+    {
+      "query_id": "q001",
+      "query": "What identification must a loan applicant provide before a credit application can proceed?",
+      "topic": "borrower_eligibility",
+      "relevant_chunk_count": 1,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "hybrid",
+          "semantic",
+          "bm25",
+          "hybrid_instructed",
+          "hybrid_reranked",
+          "semantic_instructed"
+        ],
+        [
+          "hybrid",
+          "semantic_instructed",
+          "bm25",
+          "semantic",
+          "hybrid_instructed",
+          "hybrid_reranked"
+        ],
+        [
+          "semantic_instructed",
+          "bm25",
+          "hybrid",
+          "hybrid_instructed",
+          "hybrid_reranked",
+          "semantic"
+        ],
+        [
+          "semantic_instructed",
+          "hybrid",
+          "bm25",
+          "semantic",
+          "hybrid_reranked",
+          "hybrid_instructed"
+        ],
+        [
+          "bm25",
+          "semantic_instructed",
+          "semantic",
+          "hybrid",
+          "hybrid_instructed",
+          "hybrid_reranked"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2096.917,
+          "latency": {
+            "mean_ms": 2094.083,
+            "median_ms": 2096.917,
+            "min_ms": 2077.003,
+            "max_ms": 2108.403,
+            "trials_ms": [
+              2105.612,
+              2082.478,
+              2096.917,
+              2077.003,
+              2108.403
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2104.235,
+          "latency": {
+            "mean_ms": 2109.857,
+            "median_ms": 2104.235,
+            "min_ms": 2084.806,
+            "max_ms": 2137.415,
+            "trials_ms": [
+              2137.415,
+              2084.806,
+              2104.235,
+              2090.153,
+              2132.677
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.63093
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 4.703,
+          "latency": {
+            "mean_ms": 5.623,
+            "median_ms": 4.703,
+            "min_ms": 3.51,
+            "max_ms": 9.498,
+            "trials_ms": [
+              9.498,
+              4.064,
+              6.338,
+              4.703,
+              3.51
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2100.889,
+          "latency": {
+            "mean_ms": 2109.905,
+            "median_ms": 2100.889,
+            "min_ms": 2096.05,
+            "max_ms": 2134.416,
+            "trials_ms": [
+              2096.05,
+              2134.416,
+              2100.318,
+              2100.889,
+              2117.853
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2109.054,
+          "latency": {
+            "mean_ms": 2107.894,
+            "median_ms": 2109.054,
+            "min_ms": 2077.72,
+            "max_ms": 2149.899,
+            "trials_ms": [
+              2077.72,
+              2149.899,
+              2123.13,
+              2109.054,
+              2079.665
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2494.917,
+          "latency": {
+            "mean_ms": 2548.542,
+            "median_ms": 2494.917,
+            "min_ms": 2434.457,
+            "max_ms": 2754.387,
+            "trials_ms": [
+              2754.387,
+              2487.743,
+              2434.457,
+              2571.208,
+              2494.917
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q002",
+      "query": "How does the institution determine whether a borrower can afford loan repayments?",
+      "topic": "repayment_capacity",
+      "relevant_chunk_count": 1,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "hybrid_instructed",
+          "hybrid",
+          "semantic",
+          "semantic_instructed",
+          "hybrid_reranked",
+          "bm25"
+        ],
+        [
+          "bm25",
+          "semantic_instructed",
+          "hybrid_instructed",
+          "hybrid",
+          "hybrid_reranked",
+          "semantic"
+        ],
+        [
+          "hybrid",
+          "semantic_instructed",
+          "semantic",
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "bm25"
+        ],
+        [
+          "bm25",
+          "semantic_instructed",
+          "hybrid_reranked",
+          "hybrid",
+          "semantic",
+          "hybrid_instructed"
+        ],
+        [
+          "semantic_instructed",
+          "semantic",
+          "hybrid",
+          "bm25",
+          "hybrid_instructed",
+          "hybrid_reranked"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2115.103,
+          "latency": {
+            "mean_ms": 2129.564,
+            "median_ms": 2115.103,
+            "min_ms": 2110.721,
+            "max_ms": 2158.914,
+            "trials_ms": [
+              2113.918,
+              2149.163,
+              2158.914,
+              2115.103,
+              2110.721
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.63093
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2096.27,
+          "latency": {
+            "mean_ms": 2188.181,
+            "median_ms": 2096.27,
+            "min_ms": 2084.416,
+            "max_ms": 2510.633,
+            "trials_ms": [
+              2510.633,
+              2084.416,
+              2153.899,
+              2095.686,
+              2096.27
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.63093
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 4.441,
+          "latency": {
+            "mean_ms": 4.542,
+            "median_ms": 4.441,
+            "min_ms": 3.276,
+            "max_ms": 5.829,
+            "trials_ms": [
+              4.261,
+              4.441,
+              3.276,
+              4.903,
+              5.829
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2105.146,
+          "latency": {
+            "mean_ms": 2107.525,
+            "median_ms": 2105.146,
+            "min_ms": 2097.562,
+            "max_ms": 2122.398,
+            "trials_ms": [
+              2101.132,
+              2097.562,
+              2111.388,
+              2122.398,
+              2105.146
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2099.208,
+          "latency": {
+            "mean_ms": 2140.562,
+            "median_ms": 2099.208,
+            "min_ms": 2086.204,
+            "max_ms": 2307.757,
+            "trials_ms": [
+              2307.757,
+              2122.825,
+              2086.817,
+              2086.204,
+              2099.208
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2529.705,
+          "latency": {
+            "mean_ms": 2554.481,
+            "median_ms": 2529.705,
+            "min_ms": 2510.016,
+            "max_ms": 2634.565,
+            "trials_ms": [
+              2510.016,
+              2634.565,
+              2529.705,
+              2577.55,
+              2520.568
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.63093
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q003",
+      "query": "Which credit history issues should officers consider when assessing a borrower?",
+      "topic": "credit_history",
+      "relevant_chunk_count": 1,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "hybrid_reranked",
+          "hybrid",
+          "hybrid_instructed",
+          "semantic_instructed",
+          "semantic",
+          "bm25"
+        ],
+        [
+          "hybrid_instructed",
+          "semantic_instructed",
+          "semantic",
+          "hybrid_reranked",
+          "hybrid",
+          "bm25"
+        ],
+        [
+          "hybrid_instructed",
+          "semantic",
+          "hybrid",
+          "hybrid_reranked",
+          "semantic_instructed",
+          "bm25"
+        ],
+        [
+          "bm25",
+          "hybrid",
+          "semantic",
+          "hybrid_reranked",
+          "semantic_instructed",
+          "hybrid_instructed"
+        ],
+        [
+          "semantic",
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "semantic_instructed",
+          "bm25",
+          "hybrid"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2108.983,
+          "latency": {
+            "mean_ms": 2108.039,
+            "median_ms": 2108.983,
+            "min_ms": 2081.803,
+            "max_ms": 2130.182,
+            "trials_ms": [
+              2103.821,
+              2115.408,
+              2108.983,
+              2081.803,
+              2130.182
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.63093
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "c25cba37-e9e4-433c-85da-51c20923516a"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2095.504,
+          "latency": {
+            "mean_ms": 2101.663,
+            "median_ms": 2095.504,
+            "min_ms": 2082.819,
+            "max_ms": 2131.481,
+            "trials_ms": [
+              2131.481,
+              2095.504,
+              2113.143,
+              2085.368,
+              2082.819
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.63093
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 9.878,
+          "latency": {
+            "mean_ms": 9.909,
+            "median_ms": 9.878,
+            "min_ms": 3.751,
+            "max_ms": 15.093,
+            "trials_ms": [
+              8.771,
+              3.751,
+              15.093,
+              9.878,
+              12.049
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2105.276,
+          "latency": {
+            "mean_ms": 2110.265,
+            "median_ms": 2105.276,
+            "min_ms": 2095.344,
+            "max_ms": 2129.478,
+            "trials_ms": [
+              2095.344,
+              2121.028,
+              2129.478,
+              2105.276,
+              2100.198
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2092.781,
+          "latency": {
+            "mean_ms": 2088.457,
+            "median_ms": 2092.781,
+            "min_ms": 2073.777,
+            "max_ms": 2098.838,
+            "trials_ms": [
+              2098.838,
+              2073.777,
+              2084.073,
+              2092.817,
+              2092.781
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2550.818,
+          "latency": {
+            "mean_ms": 2571.551,
+            "median_ms": 2550.818,
+            "min_ms": 2499.524,
+            "max_ms": 2709.719,
+            "trials_ms": [
+              2499.524,
+              2709.719,
+              2525.997,
+              2571.698,
+              2550.818
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q004",
+      "query": "Who reviews lending applications that require escalation beyond normal credit approval?",
+      "topic": "approval_escalation",
+      "relevant_chunk_count": 2,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "hybrid_instructed",
+          "hybrid",
+          "hybrid_reranked",
+          "semantic_instructed",
+          "semantic",
+          "bm25"
+        ],
+        [
+          "semantic",
+          "hybrid_reranked",
+          "bm25",
+          "hybrid_instructed",
+          "hybrid",
+          "semantic_instructed"
+        ],
+        [
+          "hybrid_instructed",
+          "hybrid",
+          "semantic",
+          "hybrid_reranked",
+          "bm25",
+          "semantic_instructed"
+        ],
+        [
+          "semantic",
+          "semantic_instructed",
+          "bm25",
+          "hybrid",
+          "hybrid_instructed",
+          "hybrid_reranked"
+        ],
+        [
+          "semantic",
+          "hybrid",
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "semantic_instructed",
+          "bm25"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2087.619,
+          "latency": {
+            "mean_ms": 2085.628,
+            "median_ms": 2087.619,
+            "min_ms": 2068.005,
+            "max_ms": 2106.355,
+            "trials_ms": [
+              2106.355,
+              2089.8,
+              2087.619,
+              2068.005,
+              2076.361
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.919721
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2098.646,
+          "latency": {
+            "mean_ms": 2100.177,
+            "median_ms": 2098.646,
+            "min_ms": 2079.147,
+            "max_ms": 2117.631,
+            "trials_ms": [
+              2079.147,
+              2098.646,
+              2117.631,
+              2107.327,
+              2098.132
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.919721
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 5.94,
+          "latency": {
+            "mean_ms": 6.621,
+            "median_ms": 5.94,
+            "min_ms": 3.885,
+            "max_ms": 10.104,
+            "trials_ms": [
+              5.94,
+              5.848,
+              3.885,
+              7.33,
+              10.104
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2099.365,
+          "latency": {
+            "mean_ms": 2095.42,
+            "median_ms": 2099.365,
+            "min_ms": 2069.656,
+            "max_ms": 2114.115,
+            "trials_ms": [
+              2114.115,
+              2089.353,
+              2069.656,
+              2104.612,
+              2099.365
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "240d5807-1a46-4d69-926a-626a9354bee0"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2122.333,
+          "latency": {
+            "mean_ms": 2118.844,
+            "median_ms": 2122.333,
+            "min_ms": 2092.208,
+            "max_ms": 2132.662,
+            "trials_ms": [
+              2122.333,
+              2092.208,
+              2115.583,
+              2132.662,
+              2131.435
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2533.747,
+          "latency": {
+            "mean_ms": 2530.098,
+            "median_ms": 2533.747,
+            "min_ms": 2491.855,
+            "max_ms": 2561.649,
+            "trials_ms": [
+              2491.855,
+              2561.649,
+              2533.747,
+              2502.536,
+              2560.702
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q005",
+      "query": "What records must be retained to demonstrate how a credit assessment decision was reached?",
+      "topic": "auditability",
+      "relevant_chunk_count": 1,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "hybrid_instructed",
+          "bm25",
+          "semantic_instructed",
+          "semantic",
+          "hybrid",
+          "hybrid_reranked"
+        ],
+        [
+          "semantic_instructed",
+          "semantic",
+          "hybrid_reranked",
+          "bm25",
+          "hybrid",
+          "hybrid_instructed"
+        ],
+        [
+          "hybrid_instructed",
+          "semantic_instructed",
+          "hybrid",
+          "bm25",
+          "semantic",
+          "hybrid_reranked"
+        ],
+        [
+          "hybrid_instructed",
+          "semantic_instructed",
+          "hybrid_reranked",
+          "hybrid",
+          "bm25",
+          "semantic"
+        ],
+        [
+          "hybrid",
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "semantic_instructed",
+          "bm25",
+          "semantic"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2098.195,
+          "latency": {
+            "mean_ms": 2089.771,
+            "median_ms": 2098.195,
+            "min_ms": 2068.058,
+            "max_ms": 2104.327,
+            "trials_ms": [
+              2068.058,
+              2104.327,
+              2100.032,
+              2098.195,
+              2078.245
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2105.361,
+          "latency": {
+            "mean_ms": 2103.229,
+            "median_ms": 2105.361,
+            "min_ms": 2080.917,
+            "max_ms": 2118.766,
+            "trials_ms": [
+              2118.766,
+              2097.759,
+              2113.342,
+              2105.361,
+              2080.917
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 4.71,
+          "latency": {
+            "mean_ms": 5.428,
+            "median_ms": 4.71,
+            "min_ms": 3.649,
+            "max_ms": 9.5,
+            "trials_ms": [
+              9.5,
+              3.649,
+              4.71,
+              5.455,
+              3.826
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.63093
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2091.223,
+          "latency": {
+            "mean_ms": 2091.315,
+            "median_ms": 2091.223,
+            "min_ms": 2064.91,
+            "max_ms": 2134.737,
+            "trials_ms": [
+              2098.719,
+              2066.988,
+              2134.737,
+              2064.91,
+              2091.223
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.63093
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2107.964,
+          "latency": {
+            "mean_ms": 2109.808,
+            "median_ms": 2107.964,
+            "min_ms": 2090.291,
+            "max_ms": 2128.275,
+            "trials_ms": [
+              2107.964,
+              2090.291,
+              2116.195,
+              2128.275,
+              2106.315
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.63093
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2495.175,
+          "latency": {
+            "mean_ms": 2517.832,
+            "median_ms": 2495.175,
+            "min_ms": 2488.369,
+            "max_ms": 2591.52,
+            "trials_ms": [
+              2495.175,
+              2494.76,
+              2591.52,
+              2488.369,
+              2519.338
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q006",
+      "query": "What should operations staff do when a loan application is missing required documents?",
+      "topic": "application_processing",
+      "relevant_chunk_count": 1,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "hybrid",
+          "hybrid_reranked",
+          "bm25",
+          "semantic",
+          "hybrid_instructed",
+          "semantic_instructed"
+        ],
+        [
+          "hybrid_reranked",
+          "bm25",
+          "semantic_instructed",
+          "hybrid_instructed",
+          "semantic",
+          "hybrid"
+        ],
+        [
+          "hybrid",
+          "hybrid_instructed",
+          "bm25",
+          "hybrid_reranked",
+          "semantic",
+          "semantic_instructed"
+        ],
+        [
+          "semantic_instructed",
+          "hybrid_instructed",
+          "bm25",
+          "hybrid_reranked",
+          "hybrid",
+          "semantic"
+        ],
+        [
+          "semantic",
+          "bm25",
+          "hybrid_instructed",
+          "hybrid_reranked",
+          "hybrid",
+          "semantic_instructed"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2086.015,
+          "latency": {
+            "mean_ms": 2085.257,
+            "median_ms": 2086.015,
+            "min_ms": 2078.425,
+            "max_ms": 2090.298,
+            "trials_ms": [
+              2082.597,
+              2088.948,
+              2078.425,
+              2086.015,
+              2090.298
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2100.142,
+          "latency": {
+            "mean_ms": 2102.181,
+            "median_ms": 2100.142,
+            "min_ms": 2089.93,
+            "max_ms": 2112.635,
+            "trials_ms": [
+              2089.93,
+              2096.888,
+              2112.635,
+              2100.142,
+              2111.312
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090"
+          ],
+          "latency_ms": 4.529,
+          "latency": {
+            "mean_ms": 4.445,
+            "median_ms": 4.529,
+            "min_ms": 3.45,
+            "max_ms": 5.699,
+            "trials_ms": [
+              4.529,
+              5.699,
+              4.791,
+              3.45,
+              3.756
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2113.222,
+          "latency": {
+            "mean_ms": 2107.809,
+            "median_ms": 2113.222,
+            "min_ms": 2088.472,
+            "max_ms": 2114.943,
+            "trials_ms": [
+              2113.222,
+              2088.472,
+              2114.58,
+              2107.829,
+              2114.943
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2098.687,
+          "latency": {
+            "mean_ms": 2100.371,
+            "median_ms": 2098.687,
+            "min_ms": 2075.72,
+            "max_ms": 2124.053,
+            "trials_ms": [
+              2116.537,
+              2124.053,
+              2098.687,
+              2075.72,
+              2086.859
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2587.49,
+          "latency": {
+            "mean_ms": 2601.189,
+            "median_ms": 2587.49,
+            "min_ms": 2530.511,
+            "max_ms": 2691.281,
+            "trials_ms": [
+              2587.49,
+              2567.982,
+              2628.68,
+              2691.281,
+              2530.511
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q007",
+      "query": "How should the institution handle customer activity that may indicate money laundering?",
+      "topic": "anti_money_laundering",
+      "relevant_chunk_count": 2,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "semantic",
+          "semantic_instructed",
+          "hybrid_instructed",
+          "hybrid_reranked",
+          "bm25",
+          "hybrid"
+        ],
+        [
+          "bm25",
+          "hybrid",
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "semantic_instructed",
+          "semantic"
+        ],
+        [
+          "hybrid",
+          "hybrid_reranked",
+          "bm25",
+          "semantic_instructed",
+          "hybrid_instructed",
+          "semantic"
+        ],
+        [
+          "semantic_instructed",
+          "bm25",
+          "hybrid",
+          "hybrid_instructed",
+          "hybrid_reranked",
+          "semantic"
+        ],
+        [
+          "semantic_instructed",
+          "hybrid",
+          "hybrid_instructed",
+          "hybrid_reranked",
+          "bm25",
+          "semantic"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2086.24,
+          "latency": {
+            "mean_ms": 2085.893,
+            "median_ms": 2086.24,
+            "min_ms": 2062.166,
+            "max_ms": 2114.032,
+            "trials_ms": [
+              2068.262,
+              2062.166,
+              2098.765,
+              2086.24,
+              2114.032
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2089.709,
+          "latency": {
+            "mean_ms": 2097.775,
+            "median_ms": 2089.709,
+            "min_ms": 2076.68,
+            "max_ms": 2123.943,
+            "trials_ms": [
+              2076.68,
+              2084.115,
+              2089.709,
+              2123.943,
+              2114.43
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090"
+          ],
+          "latency_ms": 4.648,
+          "latency": {
+            "mean_ms": 4.674,
+            "median_ms": 4.648,
+            "min_ms": 3.613,
+            "max_ms": 5.724,
+            "trials_ms": [
+              4.864,
+              3.613,
+              4.522,
+              4.648,
+              5.724
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2119.012,
+          "latency": {
+            "mean_ms": 2108.404,
+            "median_ms": 2119.012,
+            "min_ms": 2072.786,
+            "max_ms": 2143.363,
+            "trials_ms": [
+              2072.786,
+              2119.012,
+              2085.639,
+              2121.219,
+              2143.363
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2100.132,
+          "latency": {
+            "mean_ms": 2109.182,
+            "median_ms": 2100.132,
+            "min_ms": 2092.504,
+            "max_ms": 2138.454,
+            "trials_ms": [
+              2092.504,
+              2121.857,
+              2100.132,
+              2138.454,
+              2092.964
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2529.346,
+          "latency": {
+            "mean_ms": 2528.26,
+            "median_ms": 2529.346,
+            "min_ms": 2443.625,
+            "max_ms": 2621.054,
+            "trials_ms": [
+              2529.346,
+              2445.963,
+              2621.054,
+              2443.625,
+              2601.311
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q008",
+      "query": "What conditions must be met before an approved loan can be disbursed?",
+      "topic": "loan_disbursement",
+      "relevant_chunk_count": 1,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "bm25",
+          "semantic_instructed",
+          "semantic",
+          "hybrid",
+          "hybrid_instructed",
+          "hybrid_reranked"
+        ],
+        [
+          "bm25",
+          "hybrid_instructed",
+          "hybrid_reranked",
+          "semantic",
+          "semantic_instructed",
+          "hybrid"
+        ],
+        [
+          "hybrid_reranked",
+          "semantic",
+          "semantic_instructed",
+          "hybrid_instructed",
+          "hybrid",
+          "bm25"
+        ],
+        [
+          "hybrid",
+          "bm25",
+          "semantic_instructed",
+          "hybrid_instructed",
+          "semantic",
+          "hybrid_reranked"
+        ],
+        [
+          "bm25",
+          "hybrid",
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "semantic_instructed",
+          "semantic"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2094.447,
+          "latency": {
+            "mean_ms": 2098.342,
+            "median_ms": 2094.447,
+            "min_ms": 2091.489,
+            "max_ms": 2113.369,
+            "trials_ms": [
+              2113.369,
+              2093.279,
+              2094.447,
+              2091.489,
+              2099.126
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2107.079,
+          "latency": {
+            "mean_ms": 2112.225,
+            "median_ms": 2107.079,
+            "min_ms": 2069.299,
+            "max_ms": 2146.787,
+            "trials_ms": [
+              2107.079,
+              2142.699,
+              2095.26,
+              2069.299,
+              2146.787
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "2e7bd369-788d-41db-a1dd-865e9160c390"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 4.262,
+          "latency": {
+            "mean_ms": 4.294,
+            "median_ms": 4.262,
+            "min_ms": 3.501,
+            "max_ms": 5.313,
+            "trials_ms": [
+              3.52,
+              4.262,
+              4.872,
+              3.501,
+              5.313
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2091.675,
+          "latency": {
+            "mean_ms": 2092.78,
+            "median_ms": 2091.675,
+            "min_ms": 2079.383,
+            "max_ms": 2105.519,
+            "trials_ms": [
+              2079.383,
+              2091.235,
+              2096.087,
+              2091.675,
+              2105.519
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2107.084,
+          "latency": {
+            "mean_ms": 2108.45,
+            "median_ms": 2107.084,
+            "min_ms": 2086.454,
+            "max_ms": 2132.461,
+            "trials_ms": [
+              2086.454,
+              2107.084,
+              2125.506,
+              2132.461,
+              2090.746
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2517.658,
+          "latency": {
+            "mean_ms": 2524.209,
+            "median_ms": 2517.658,
+            "min_ms": 2449.17,
+            "max_ms": 2623.17,
+            "trials_ms": [
+              2449.17,
+              2491.87,
+              2517.658,
+              2623.17,
+              2539.176
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q009",
+      "query": "What happens when a loan applicant exceeds the permitted repayment threshold or an officer's approval authority?",
+      "topic": "cross_document_approval_controls",
+      "relevant_chunk_count": 2,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "bm25",
+          "hybrid",
+          "semantic",
+          "semantic_instructed"
+        ],
+        [
+          "semantic_instructed",
+          "bm25",
+          "hybrid",
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "semantic"
+        ],
+        [
+          "bm25",
+          "semantic",
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "hybrid",
+          "semantic_instructed"
+        ],
+        [
+          "bm25",
+          "hybrid_instructed",
+          "hybrid_reranked",
+          "semantic_instructed",
+          "semantic",
+          "hybrid"
+        ],
+        [
+          "semantic",
+          "hybrid_instructed",
+          "semantic_instructed",
+          "hybrid_reranked",
+          "bm25",
+          "hybrid"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2102.277,
+          "latency": {
+            "mean_ms": 2108.937,
+            "median_ms": 2102.277,
+            "min_ms": 2093.409,
+            "max_ms": 2125.227,
+            "trials_ms": [
+              2093.409,
+              2125.227,
+              2123.622,
+              2102.277,
+              2100.148
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.919721
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2105.246,
+          "latency": {
+            "mean_ms": 2105.061,
+            "median_ms": 2105.246,
+            "min_ms": 2095.648,
+            "max_ms": 2113.829,
+            "trials_ms": [
+              2103.078,
+              2105.246,
+              2095.648,
+              2107.504,
+              2113.829
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.919721
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 6.296,
+          "latency": {
+            "mean_ms": 9.077,
+            "median_ms": 6.296,
+            "min_ms": 3.928,
+            "max_ms": 19.648,
+            "trials_ms": [
+              6.296,
+              3.928,
+              19.648,
+              11.156,
+              4.359
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.919721
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2122.614,
+          "latency": {
+            "mean_ms": 2124.529,
+            "median_ms": 2122.614,
+            "min_ms": 2112.818,
+            "max_ms": 2144.392,
+            "trials_ms": [
+              2144.392,
+              2113.82,
+              2112.818,
+              2129.0,
+              2122.614
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.919721
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2097.805,
+          "latency": {
+            "mean_ms": 2100.017,
+            "median_ms": 2097.805,
+            "min_ms": 2076.347,
+            "max_ms": 2121.531,
+            "trials_ms": [
+              2097.805,
+              2121.531,
+              2076.347,
+              2109.934,
+              2094.47
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.919721
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2488.403,
+          "latency": {
+            "mean_ms": 2544.377,
+            "median_ms": 2488.403,
+            "min_ms": 2463.29,
+            "max_ms": 2663.023,
+            "trials_ms": [
+              2463.29,
+              2663.023,
+              2465.004,
+              2642.163,
+              2488.403
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q010",
+      "query": "How can employees reserve a meeting room, and what information should they provide?",
+      "topic": "general_office_procedures",
+      "relevant_chunk_count": 1,
+      "warmup_runs_per_strategy": 1,
+      "measured_trials_per_strategy": 5,
+      "trial_execution_orders": [
+        [
+          "hybrid_instructed",
+          "hybrid",
+          "hybrid_reranked",
+          "semantic",
+          "semantic_instructed",
+          "bm25"
+        ],
+        [
+          "hybrid_instructed",
+          "semantic_instructed",
+          "hybrid",
+          "semantic",
+          "bm25",
+          "hybrid_reranked"
+        ],
+        [
+          "hybrid",
+          "bm25",
+          "semantic",
+          "semantic_instructed",
+          "hybrid_reranked",
+          "hybrid_instructed"
+        ],
+        [
+          "hybrid_reranked",
+          "hybrid",
+          "bm25",
+          "hybrid_instructed",
+          "semantic",
+          "semantic_instructed"
+        ],
+        [
+          "hybrid_reranked",
+          "hybrid_instructed",
+          "bm25",
+          "semantic_instructed",
+          "semantic",
+          "hybrid"
+        ]
+      ],
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2087.726,
+          "latency": {
+            "mean_ms": 2085.787,
+            "median_ms": 2087.726,
+            "min_ms": 2072.362,
+            "max_ms": 2094.573,
+            "trials_ms": [
+              2087.726,
+              2089.294,
+              2084.979,
+              2094.573,
+              2072.362
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2100.131,
+          "latency": {
+            "mean_ms": 2107.821,
+            "median_ms": 2100.131,
+            "min_ms": 2088.441,
+            "max_ms": 2129.725,
+            "trials_ms": [
+              2121.689,
+              2129.725,
+              2099.121,
+              2100.131,
+              2088.441
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 5.506,
+          "latency": {
+            "mean_ms": 5.615,
+            "median_ms": 5.506,
+            "min_ms": 3.923,
+            "max_ms": 7.59,
+            "trials_ms": [
+              7.59,
+              5.556,
+              5.506,
+              3.923,
+              5.499
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2104.793,
+          "latency": {
+            "mean_ms": 2100.57,
+            "median_ms": 2104.793,
+            "min_ms": 2076.061,
+            "max_ms": 2120.544,
+            "trials_ms": [
+              2076.061,
+              2108.563,
+              2092.888,
+              2120.544,
+              2104.793
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2116.673,
+          "latency": {
+            "mean_ms": 2113.987,
+            "median_ms": 2116.673,
+            "min_ms": 2073.276,
+            "max_ms": 2136.962,
+            "trials_ms": [
+              2073.276,
+              2116.673,
+              2136.962,
+              2132.836,
+              2110.186
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2530.351,
+          "latency": {
+            "mean_ms": 2524.059,
+            "median_ms": 2530.351,
+            "min_ms": 2446.139,
+            "max_ms": 2608.027,
+            "trials_ms": [
+              2530.351,
+              2608.027,
+              2446.139,
+              2553.502,
+              2482.275
+            ]
+          },
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    }
+  ]
+}

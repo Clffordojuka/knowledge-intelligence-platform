@@ -1,0 +1,1601 @@
+{
+  "experiment": {
+    "name": "BGE query instruction comparison",
+    "query_instruction": "Represent this sentence for searching relevant passages: ",
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "top_k": 5,
+    "hybrid_candidate_limit": 20,
+    "strategies": [
+      "semantic",
+      "semantic_instructed",
+      "bm25",
+      "hybrid",
+      "hybrid_instructed",
+      "hybrid_reranked"
+    ],
+    "purpose": "Compare baseline and instructed semantic retrieval and hybrid retrieval under the same benchmark conditions.",
+    "latency_note": "Single-pass wall-clock measurements. Model initialization, cache state, and machine load may affect individual timings."
+  },
+  "dataset_name": "knowledge_intelligence_multidocument_retrieval",
+  "dataset_version": "2.0",
+  "corpus_documents": {
+    "credit_policy.txt": "4fb81b3a-73c4-4512-8594-461d712a263c",
+    "loan_operations_sop.txt": "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+    "risk_management_policy.txt": "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+    "compliance_policy.txt": "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+    "general_office_procedures.txt": "28ffd589-2c16-4a0c-b4da-bcabdf7e2090"
+  },
+  "corpus_document_count": 5,
+  "evaluation_cutoff": 5,
+  "query_count": 10,
+  "reranker": {
+    "model_name": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+    "model_load_latency_ms": 5262.611
+  },
+  "aggregate_metrics": {
+    "semantic": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.9,
+      "ndcg_at_5": 0.9101301085439291,
+      "mean_latency_ms": 2630.1169
+    },
+    "semantic_instructed": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.85,
+      "ndcg_at_5": 0.8732230839010747,
+      "mean_latency_ms": 2102.5658
+    },
+    "bm25": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.95,
+      "ndcg_at_5": 0.9550650542719645,
+      "mean_latency_ms": 12.3879
+    },
+    "hybrid": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.95,
+      "ndcg_at_5": 0.9550650542719645,
+      "mean_latency_ms": 2112.4115
+    },
+    "hybrid_instructed": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.95,
+      "ndcg_at_5": 0.9550650542719645,
+      "mean_latency_ms": 2106.4281
+    },
+    "hybrid_reranked": {
+      "precision_at_5": 0.26,
+      "recall_at_5": 1.0,
+      "mrr": 0.95,
+      "ndcg_at_5": 0.9630929753571458,
+      "mean_latency_ms": 2565.6177
+    }
+  },
+  "query_results": [
+    {
+      "query_id": "q001",
+      "query": "What identification must a loan applicant provide before a credit application can proceed?",
+      "topic": "borrower_eligibility",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 7449.45,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2109.494,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 22.524,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2071.81,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2112.472,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2467.343,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q002",
+      "query": "How does the institution determine whether a borrower can afford loan repayments?",
+      "topic": "repayment_capacity",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2096.78,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2091.145,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 5.201,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2108.48,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2118.994,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2676.392,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q003",
+      "query": "Which credit history issues should officers consider when assessing a borrower?",
+      "topic": "credit_history",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2101.122,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "c25cba37-e9e4-433c-85da-51c20923516a"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2100.894,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 21.339,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2119.404,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2131.087,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2581.518,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q004",
+      "query": "Who reviews lending applications that require escalation beyond normal credit approval?",
+      "topic": "approval_escalation",
+      "relevant_chunk_count": 2,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2066.528,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.9197207891481876
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2123.296,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.9197207891481876
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 20.244,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2128.935,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "240d5807-1a46-4d69-926a-626a9354bee0"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2093.825,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2541.305,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q005",
+      "query": "What records must be retained to demonstrate how a credit assessment decision was reached?",
+      "topic": "auditability",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2079.221,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2097.221,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 4.672,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2089.218,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2083.357,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2568.388,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q006",
+      "query": "What should operations staff do when a loan application is missing required documents?",
+      "topic": "application_processing",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2089.762,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2090.117,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090"
+          ],
+          "latency_ms": 11.472,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2102.822,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2068.425,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2514.436,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q007",
+      "query": "How should the institution handle customer activity that may indicate money laundering?",
+      "topic": "anti_money_laundering",
+      "relevant_chunk_count": 2,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2107.031,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2131.488,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090"
+          ],
+          "latency_ms": 10.11,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2092.203,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2127.333,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2443.957,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q008",
+      "query": "What conditions must be met before an approved loan can be disbursed?",
+      "topic": "loan_disbursement",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2086.542,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "c25cba37-e9e4-433c-85da-51c20923516a"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2100.626,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "2e7bd369-788d-41db-a1dd-865e9160c390"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 4.226,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2126.051,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "20dd50d3-510c-47f9-8077-62578b621761"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 2099.915,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "20dd50d3-510c-47f9-8077-62578b621761",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2835.175,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q009",
+      "query": "What happens when a loan applicant exceeds the permitted repayment threshold or an officer's approval authority?",
+      "topic": "cross_document_approval_controls",
+      "relevant_chunk_count": 2,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2140.189,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.9197207891481876
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2102.85,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.9197207891481876
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 5.928,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.9197207891481876
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2138.706,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.9197207891481876
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00"
+          ],
+          "latency_ms": 2109.898,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 0.9197207891481876
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "c25cba37-e9e4-433c-85da-51c20923516a",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "89b393bb-237a-4e60-8224-2a5a016e2a60",
+            "85f47cae-4db3-4871-ab9b-86b6d9ad8d16"
+          ],
+          "retrieved_document_ids": [
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2490.614,
+          "metrics": {
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    },
+    {
+      "query_id": "q010",
+      "query": "How can employees reserve a meeting room, and what information should they provide?",
+      "topic": "general_office_procedures",
+      "relevant_chunk_count": 1,
+      "strategies": {
+        "semantic": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2084.544,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "semantic_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2078.527,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "bm25": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+            "f5f8391b-7e69-423b-989a-0c29473707ab"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025"
+          ],
+          "latency_ms": 18.163,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "723277fa-aae0-4464-bcc6-53b7e1b66955"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "2f425200-6cc3-4e41-b5bb-3e3c19a49086"
+          ],
+          "latency_ms": 2146.486,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_instructed": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "2e7bd369-788d-41db-a1dd-865e9160c390",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2118.975,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        },
+        "hybrid_reranked": {
+          "retrieved_count": 5,
+          "retrieved_chunk_ids": [
+            "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+            "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+            "f5f8391b-7e69-423b-989a-0c29473707ab",
+            "240d5807-1a46-4d69-926a-626a9354bee0",
+            "fcc1d036-aaf1-48b3-a526-4e95910bdfe6"
+          ],
+          "retrieved_document_ids": [
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+            "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+            "4fb81b3a-73c4-4512-8594-461d712a263c",
+            "4fb81b3a-73c4-4512-8594-461d712a263c"
+          ],
+          "latency_ms": 2537.049,
+          "metrics": {
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "mrr": 1.0,
+            "ndcg_at_5": 1.0
+          }
+        }
+      }
+    }
+  ]
+}

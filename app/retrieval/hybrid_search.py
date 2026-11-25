@@ -43,6 +43,7 @@ def search_hybrid_chunks(
     rerank: bool = False,
     reranker: CrossEncoder | None = None,
     document_ids: list[UUID] | None = None,
+    query_instruction: str | None = None,
 ) -> list[HybridSearchResult]:
     """Retrieve, fuse, and optionally rerank semantic and keyword results."""
 
@@ -88,6 +89,15 @@ def search_hybrid_chunks(
         if len(document_ids) != len(set(document_ids)):
             raise ValueError("Document IDs must not contain duplicates.")
 
+    if query_instruction is not None:
+        if (
+            not isinstance(query_instruction, str)
+            or not query_instruction.strip()
+        ):
+            raise ValueError(
+                "Query instruction must be a non-empty string or None."
+            )
+
     try:
         semantic_results = search_similar_chunks(
             query=query,
@@ -96,6 +106,7 @@ def search_hybrid_chunks(
             client=client,
             embedding_service=embedding_service,
             document_ids=document_ids,
+            query_instruction=query_instruction,
         )
 
         bm25_results = search_bm25(

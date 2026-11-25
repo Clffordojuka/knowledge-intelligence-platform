@@ -89,7 +89,53 @@ def test_embed_query_generates_single_embedding(mock_model):
     embedding = service.embed_query("How are loans approved?")
 
     assert len(embedding) == 384
-    mock_model.encode.assert_called_once()
+
+    mock_model.encode.assert_called_once_with(
+        ["How are loans approved?"],
+        batch_size=32,
+        convert_to_numpy=True,
+        normalize_embeddings=True,
+        show_progress_bar=False,
+    )
+
+
+def test_embed_query_supports_optional_instruction(mock_model):
+    service = EmbeddingService()
+
+    instruction = "Represent this sentence for searching relevant passages: "
+    query = "How are loans approved?"
+
+    embedding = service.embed_query(
+        query,
+        instruction=instruction,
+    )
+
+    assert len(embedding) == 384
+
+    mock_model.encode.assert_called_once_with(
+        [instruction + query],
+        batch_size=32,
+        convert_to_numpy=True,
+        normalize_embeddings=True,
+        show_progress_bar=False,
+    )
+
+
+def test_embed_query_without_instruction_preserves_original_text(mock_model):
+    service = EmbeddingService()
+
+    service.embed_query(
+        "How are loans approved?",
+        instruction=None,
+    )
+
+    mock_model.encode.assert_called_once_with(
+        ["How are loans approved?"],
+        batch_size=32,
+        convert_to_numpy=True,
+        normalize_embeddings=True,
+        show_progress_bar=False,
+    )
 
 
 def test_embed_query_rejects_empty_query(mock_model):
@@ -97,6 +143,16 @@ def test_embed_query_rejects_empty_query(mock_model):
 
     with pytest.raises(ValueError, match="non-empty string"):
         service.embed_query("   ")
+
+
+def test_embed_query_rejects_invalid_instruction(mock_model):
+    service = EmbeddingService()
+
+    with pytest.raises(ValueError, match="instruction must be a string"):
+        service.embed_query(
+            "How are loans approved?",
+            instruction=123,
+        )
 
 
 def test_model_loading_failure_is_wrapped(monkeypatch):

@@ -1,0 +1,161 @@
+{
+  "export_type": "retrieval_error_analysis_corpus",
+  "document_count": 5,
+  "total_chunk_count": 11,
+  "documents": [
+    {
+      "document_id": "c508cafa-0c59-4981-80bd-f9bcdcc17025",
+      "filename": "compliance_policy.txt",
+      "status": "completed",
+      "indexing_status": "completed",
+      "page_count": 1,
+      "extracted_char_count": 1259,
+      "chunk_count": 3,
+      "chunks": [
+        {
+          "chunk_id": "20dd50d3-510c-47f9-8077-62578b621761",
+          "chunk_index": 0,
+          "content": "COMPLIANCE AND RECORDKEEPING POLICY\n\n1. Customer Due Diligence\nThe institution must perform customer due diligence before establishing\na lending relationship. Customer identity and relevant customer information\nmust be verified in accordance with applicable compliance requirements.\n\n2. Anti-Money Laundering Controls\nCustomer and transaction activity must be reviewed for indicators of\npotential money laundering or other suspicious activity. Identified concerns\nmust be handled through the institution's established reporting procedures.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 0,
+          "char_end": 539
+        },
+        {
+          "chunk_id": "f5f8391b-7e69-423b-989a-0c29473707ab",
+          "chunk_index": 1,
+          "content": "suspicious activity. Identified concerns\nmust be handled through the institution's established reporting procedures.\n\n3. Auditability\nCredit application records must retain identity verification findings,\nrepayment capacity calculations, and credit-history review outcomes.\nRecords must provide sufficient evidence to reconstruct the decisions made\nduring the credit assessment process.\n\n4. Access and Confidentiality\nCustomer information must only be accessed by personnel with an authorized\nbusiness need. Customer records must be protected against unauthorized\ndisclosure, alteration, or loss.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 423,
+          "char_end": 1019
+        },
+        {
+          "chunk_id": "2e7bd369-788d-41db-a1dd-865e9160c390",
+          "chunk_index": 2,
+          "content": "an authorized\nbusiness need. Customer records must be protected against unauthorized\ndisclosure, alteration, or loss.\n\n5. Compliance Monitoring\nCompliance personnel must periodically assess adherence to internal\nprocedures and applicable regulatory obligations. Material compliance\nfindings must be documented and escalated through the appropriate channels.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 902,
+          "char_end": 1259
+        }
+      ]
+    },
+    {
+      "document_id": "4fb81b3a-73c4-4512-8594-461d712a263c",
+      "filename": "credit_policy.txt",
+      "status": "completed",
+      "indexing_status": "completed",
+      "page_count": 1,
+      "extracted_char_count": 995,
+      "chunk_count": 2,
+      "chunks": [
+        {
+          "chunk_id": "240d5807-1a46-4d69-926a-626a9354bee0",
+          "chunk_index": 0,
+          "content": "CREDIT POLICY\n\n1. Borrower Eligibility\nAll loan applicants must provide valid government-issued photo identification.\nApplicants must meet the institution's minimum eligibility requirements before\na credit application can proceed.\n\n2. Repayment Capacity Assessment\nCredit officers must assess monthly disposable income after existing debt\nobligations. The maximum permitted debt-service ratio is 40 percent.\nApplicants exceeding this threshold must not receive standard loan approval\nwithout an authorized exception.\n\n3. Credit History Review\nCredit officers must review the applicant's credit history, including\nunresolved defaults and delinquent repayment accounts. Adverse credit\ninformation must be considered when determining borrower risk.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 0,
+          "char_end": 745
+        },
+        {
+          "chunk_id": "fcc1d036-aaf1-48b3-a526-4e95910bdfe6",
+          "chunk_index": 1,
+          "content": "and delinquent repayment accounts. Adverse credit\ninformation must be considered when determining borrower risk.\n\n4. Credit Approval\nApplications meeting the eligibility, repayment capacity, and credit-history\nrequirements may proceed through the standard approval workflow. Exceptions\nmust follow the institution's designated escalation and approval procedures.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 633,
+          "char_end": 995
+        }
+      ]
+    },
+    {
+      "document_id": "28ffd589-2c16-4a0c-b4da-bcabdf7e2090",
+      "filename": "general_office_procedures.txt",
+      "status": "completed",
+      "indexing_status": "completed",
+      "page_count": 1,
+      "extracted_char_count": 942,
+      "chunk_count": 2,
+      "chunks": [
+        {
+          "chunk_id": "205dbf16-de0b-4333-ae0c-4159ba82c3ba",
+          "chunk_index": 0,
+          "content": "GENERAL OFFICE PROCEDURES\n\n1. Meeting Room Reservations\nEmployees should reserve meeting rooms through the internal scheduling\nsystem. Reservations should include the meeting title, expected attendance,\ndate, and duration.\n\n2. Office Equipment\nEmployees should report faulty office equipment to the facilities team.\nEquipment maintenance requests must include the equipment location and\na description of the reported problem.\n\n3. Visitor Management\nVisitors must register at the reception desk upon arrival. Hosts are\nresponsible for notifying reception when their visitors have arrived.\n\n4. Office Supplies\nDepartments may request stationery and other office supplies through\nthe standard procurement process. Requests should identify the items\nrequired and the intended department.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 0,
+          "char_end": 783
+        },
+        {
+          "chunk_id": "bacb7608-0556-4a9a-b0c1-f6a11dcfdc90",
+          "chunk_index": 1,
+          "content": "through\nthe standard procurement process. Requests should identify the items\nrequired and the intended department.\n\n5. Workplace Communication\nEmployees should use approved internal communication channels for routine\nadministrative announcements and workplace coordination.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 669,
+          "char_end": 942
+        }
+      ]
+    },
+    {
+      "document_id": "2f425200-6cc3-4e41-b5bb-3e3c19a49086",
+      "filename": "loan_operations_sop.txt",
+      "status": "completed",
+      "indexing_status": "completed",
+      "page_count": 1,
+      "extracted_char_count": 1145,
+      "chunk_count": 2,
+      "chunks": [
+        {
+          "chunk_id": "723277fa-aae0-4464-bcc6-53b7e1b66955",
+          "chunk_index": 0,
+          "content": "LOAN OPERATIONS STANDARD OPERATING PROCEDURE\n\n1. Application Registration\nEvery loan application must be assigned a unique application reference.\nOperations personnel must record the applicant's details, submission date,\nrequested loan amount, and application status.\n\n2. Document Verification\nOperations personnel must confirm that all required application documents\nhave been received. Identity documents must be checked for completeness and\nconsistency with the information submitted by the applicant.\n\n3. Application Processing\nApplications with missing documentation must be returned for clarification.\nApplications with complete documentation may proceed to credit assessment.\nThe application status must be updated at every major processing stage.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 0,
+          "char_end": 754
+        },
+        {
+          "chunk_id": "85f47cae-4db3-4871-ab9b-86b6d9ad8d16",
+          "chunk_index": 1,
+          "content": "documentation may proceed to credit assessment.\nThe application status must be updated at every major processing stage.\n\n4. Loan Disbursement\nApproved loan applications may proceed to disbursement after all required\napproval conditions have been satisfied. Disbursement records must include\nthe approved amount, transaction reference, and disbursement date.\n\n5. Record Retention\nApplication records and supporting documents must be retained in accordance\nwith the institution's records-management requirements.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 635,
+          "char_end": 1145
+        }
+      ]
+    },
+    {
+      "document_id": "1cf4ff26-f7dd-4ef1-9faf-7ee8183f7e00",
+      "filename": "risk_management_policy.txt",
+      "status": "completed",
+      "indexing_status": "completed",
+      "page_count": 1,
+      "extracted_char_count": 1053,
+      "chunk_count": 2,
+      "chunks": [
+        {
+          "chunk_id": "89b393bb-237a-4e60-8224-2a5a016e2a60",
+          "chunk_index": 0,
+          "content": "RISK MANAGEMENT POLICY\n\n1. Risk Identification\nThe institution must identify and document risks arising from lending\nactivities. Risk assessments should consider borrower characteristics,\nrepayment capacity, credit history, and relevant external factors.\n\n2. Risk Classification\nCredit applications must be classified according to the institution's\napproved risk categories. Risk classifications must be supported by\ndocumented assessment findings.\n\n3. Exception Escalation\nApplications that fall outside established credit policy thresholds must be\nescalated to the senior credit approval committee when the applicable\ndelegated authority requires committee review.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 0,
+          "char_end": 666
+        },
+        {
+          "chunk_id": "c25cba37-e9e4-433c-85da-51c20923516a",
+          "chunk_index": 1,
+          "content": "be\nescalated to the senior credit approval committee when the applicable\ndelegated authority requires committee review.\n\n4. Approval Authority\nCredit officers may approve applications only within their assigned\ndelegated approval limits. Applications exceeding those limits require\napproval from the appropriate higher authority.\n\n5. Risk Monitoring\nThe risk management function must periodically review lending portfolio\nperformance, identify emerging risks, and report significant findings to\nmanagement.",
+          "page_start": 1,
+          "page_end": 1,
+          "char_start": 547,
+          "char_end": 1053
+        }
+      ]
+    }
+  ]
+}

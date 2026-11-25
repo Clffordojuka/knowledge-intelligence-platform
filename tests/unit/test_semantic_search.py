@@ -1,3 +1,4 @@
+
 from types import SimpleNamespace
 from uuid import uuid4
 
@@ -18,9 +19,11 @@ class FakeEmbeddingService:
         self.vector_dimension = dimension or settings.embedding_dimension
         self.should_fail = should_fail
         self.received_query = None
+        self.received_instruction = None
 
-    def embed_query(self, query):
+    def embed_query(self, query, instruction=None):
         self.received_query = query
+        self.received_instruction = instruction
 
         if self.should_fail:
             raise RuntimeError("Embedding generation failed.")
@@ -120,10 +123,46 @@ def test_successful_semantic_search(embedding_service, qdrant_client):
     assert embedding_service.received_query == (
         "What are the credit approval requirements?"
     )
+    assert embedding_service.received_instruction is None
 
     assert qdrant_client.received_arguments["limit"] == 5
     assert qdrant_client.received_arguments["with_payload"] is True
     assert qdrant_client.received_arguments["with_vectors"] is False
+
+
+def test_semantic_search_passes_query_instruction(
+    embedding_service,
+    qdrant_client,
+):
+    query = "What are the credit approval requirements?"
+    instruction = "Represent this sentence for searching relevant passages: "
+
+    search_similar_chunks(
+        query=query,
+        query_instruction=instruction,
+        client=qdrant_client,
+        embedding_service=embedding_service,
+    )
+
+    assert embedding_service.received_query == query
+    assert embedding_service.received_instruction == instruction
+
+
+def test_semantic_search_rejects_invalid_query_instruction():
+    invalid_instructions = [
+        "",
+        "   ",
+        123,
+        True,
+        [],
+    ]
+
+    for instruction in invalid_instructions:
+        with pytest.raises(ValueError, match="Query instruction"):
+            search_similar_chunks(
+                query="Find policy information",
+                query_instruction=instruction,
+            )
 
 
 def test_semantic_search_returns_empty_list(
@@ -158,6 +197,29 @@ def test_semantic_search_filters_by_document(
     assert len(query_filter.must) == 1
     assert query_filter.must[0].key == "document_id"
     assert query_filter.must[0].match.value == str(document_id)
+
+
+def test_semantic_search_filters_by_multiple_documents(
+    embedding_service,
+    qdrant_client,
+):
+    document_ids = [uuid4(), uuid4()]
+
+    search_similar_chunks(
+        query="Find policy information",
+        document_ids=document_ids,
+        client=qdrant_client,
+        embedding_service=embedding_service,
+    )
+
+    query_filter = qdrant_client.received_arguments["query_filter"]
+
+    assert query_filter is not None
+    assert len(query_filter.must) == 1
+    assert query_filter.must[0].key == "document_id"
+    assert query_filter.must[0].match.any == [
+        str(document_id) for document_id in document_ids
+    ]
 
 
 def test_semantic_search_without_document_filter(
@@ -330,7 +392,9 @@ def test_semantic_search_handles_qdrant_failure(embedding_service):
 def test_semantic_search_rejects_wrong_embedding_dimension(
     qdrant_client,
 ):
-    wrong_dimension = FakeEmbeddingService(dimension=settings.embedding_dimension + 1)
+    wrong_dimension = FakeEmbeddingService(
+        dimension=settings.embedding_dimension + 1
+    )
 
     with pytest.raises(RetrievalError, match="dimension"):
         search_similar_chunks(

@@ -1,4 +1,3 @@
-
 from dataclasses import dataclass
 from math import isfinite
 from uuid import UUID
@@ -60,7 +59,7 @@ def _build_document_filter(
                 FieldCondition(
                     key="document_id",
                     match=MatchAny(
-                        any=[str(document_id) for document_id in document_ids]
+                        any=[str(item) for item in document_ids]
                     ),
                 )
             ]
@@ -119,6 +118,7 @@ def search_similar_chunks(
     client: QdrantClient | None = None,
     embedding_service: EmbeddingService | None = None,
     document_ids: list[UUID] | None = None,
+    query_instruction: str | None = None,
 ) -> list[SearchResult]:
     """Search Qdrant for semantically similar document chunks."""
 
@@ -146,6 +146,15 @@ def search_similar_chunks(
         if len(document_ids) != len(set(document_ids)):
             raise ValueError("Document IDs must not contain duplicates.")
 
+    if query_instruction is not None:
+        if (
+            not isinstance(query_instruction, str)
+            or not query_instruction.strip()
+        ):
+            raise ValueError(
+                "Query instruction must be a non-empty string or None."
+            )
+
     if score_threshold is not None:
         if (
             isinstance(score_threshold, bool)
@@ -165,7 +174,16 @@ def search_similar_chunks(
             else embedding_service
         )
 
-        query_vector = embedder.embed_query(query.strip())
+        normalized_query = query.strip()
+
+        if query_instruction is None:
+            # Preserve the original embedding call by default.
+            query_vector = embedder.embed_query(normalized_query)
+        else:
+            query_vector = embedder.embed_query(
+                normalized_query,
+                instruction=query_instruction,
+            )
 
         if len(query_vector) != settings.embedding_dimension:
             raise RetrievalError(

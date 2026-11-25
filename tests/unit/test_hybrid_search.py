@@ -57,6 +57,26 @@ def make_bm25_result(
     )
 
 
+def make_hybrid_result(
+    chunk_id: UUID | None = None,
+    document_id: UUID | None = None,
+    content: str = "Sample policy content.",
+    rrf_score: float = 0.03,
+) -> HybridSearchResult:
+    return HybridSearchResult(
+        chunk_id=chunk_id or uuid4(),
+        document_id=document_id or uuid4(),
+        chunk_index=0,
+        content=content,
+        filename="credit_policy.txt",
+        page_start=1,
+        page_end=2,
+        rrf_score=rrf_score,
+        semantic_score=0.90,
+        bm25_score=4.5,
+    )
+
+
 def test_hybrid_search_combines_semantic_and_bm25_results(monkeypatch):
     chunk_id = uuid4()
     document_id = uuid4()
@@ -92,6 +112,90 @@ def test_hybrid_search_combines_semantic_and_bm25_results(monkeypatch):
     assert results[0].semantic_score == pytest.approx(0.90)
     assert results[0].bm25_score == pytest.approx(4.5)
     assert results[0].rrf_score == pytest.approx(2 / 61)
+
+
+def test_hybrid_search_forwards_query_instruction_to_semantic_only(
+    monkeypatch,
+):
+    instruction = (
+        "Represent this sentence for searching relevant passages: "
+    )
+    captured = {}
+
+    def fake_semantic_search(**kwargs):
+        captured["semantic_instruction"] = kwargs["query_instruction"]
+        return []
+
+    def fake_bm25_search(**kwargs):
+        captured["bm25_query"] = kwargs["query"]
+        return []
+
+    monkeypatch.setattr(
+        hybrid_search,
+        "search_similar_chunks",
+        fake_semantic_search,
+    )
+    monkeypatch.setattr(
+        hybrid_search,
+        "search_bm25",
+        fake_bm25_search,
+    )
+
+    search_hybrid_chunks(
+        db=object(),
+        query="What are the credit approval requirements?",
+        query_instruction=instruction,
+    )
+
+    assert captured["semantic_instruction"] == instruction
+    assert captured["bm25_query"] == (
+        "What are the credit approval requirements?"
+    )
+
+
+def test_hybrid_search_passes_none_instruction_by_default(monkeypatch):
+    captured = {}
+
+    def fake_semantic_search(**kwargs):
+        captured["query_instruction"] = kwargs["query_instruction"]
+        return []
+
+    monkeypatch.setattr(
+        hybrid_search,
+        "search_similar_chunks",
+        fake_semantic_search,
+    )
+    monkeypatch.setattr(
+        hybrid_search,
+        "search_bm25",
+        lambda **kwargs: [],
+    )
+
+    search_hybrid_chunks(
+        db=object(),
+        query="credit policy",
+    )
+
+    assert captured["query_instruction"] is None
+
+
+@pytest.mark.parametrize(
+    "instruction",
+    [
+        "",
+        "   ",
+        123,
+        True,
+        [],
+    ],
+)
+def test_hybrid_search_rejects_invalid_query_instructions(instruction):
+    with pytest.raises(ValueError, match="Query instruction"):
+        search_hybrid_chunks(
+            db=object(),
+            query="credit policy",
+            query_instruction=instruction,
+        )
 
 
 def test_hybrid_search_uses_default_candidate_limit(monkeypatch):
@@ -192,6 +296,39 @@ def test_hybrid_search_forwards_document_filter(monkeypatch):
     assert captured["bm25_document_id"] == document_id
 
 
+def test_hybrid_search_forwards_multiple_document_filters(monkeypatch):
+    document_ids = [uuid4(), uuid4()]
+    captured = {}
+
+    def fake_semantic_search(**kwargs):
+        captured["semantic_document_ids"] = kwargs["document_ids"]
+        return []
+
+    def fake_bm25_search(**kwargs):
+        captured["bm25_document_ids"] = kwargs["document_ids"]
+        return []
+
+    monkeypatch.setattr(
+        hybrid_search,
+        "search_similar_chunks",
+        fake_semantic_search,
+    )
+    monkeypatch.setattr(
+        hybrid_search,
+        "search_bm25",
+        fake_bm25_search,
+    )
+
+    search_hybrid_chunks(
+        db=object(),
+        query="credit policy",
+        document_ids=document_ids,
+    )
+
+    assert captured["semantic_document_ids"] == document_ids
+    assert captured["bm25_document_ids"] == document_ids
+
+
 def test_hybrid_search_returns_empty_list_when_no_results(monkeypatch):
     monkeypatch.setattr(
         hybrid_search,
@@ -261,24 +398,6 @@ def test_hybrid_search_returns_bm25_only_results(monkeypatch):
     assert results[0].semantic_score is None
     assert results[0].bm25_score == bm25_result.score
 
-def make_hybrid_result(
-    chunk_id: UUID | None = None,
-    document_id: UUID | None = None,
-    content: str = "Sample policy content.",
-    rrf_score: float = 0.03,
-) -> HybridSearchResult:
-    return HybridSearchResult(
-        chunk_id=chunk_id or uuid4(),
-        document_id=document_id or uuid4(),
-        chunk_index=0,
-        content=content,
-        filename="credit_policy.txt",
-        page_start=1,
-        page_end=2,
-        rrf_score=rrf_score,
-        semantic_score=0.90,
-        bm25_score=4.5,
-    )
 
 def test_hybrid_search_wraps_semantic_retrieval_errors(monkeypatch):
     def failing_semantic_search(**kwargs):
@@ -385,6 +504,7 @@ def test_hybrid_search_rejects_candidate_limit_smaller_than_result_limit():
             candidate_limit=5,
         )
 
+
 def test_hybrid_search_invokes_reranker_when_enabled(monkeypatch):
     candidates = [
         make_hybrid_result(content="First candidate."),
@@ -448,7 +568,6 @@ def test_hybrid_search_uses_default_candidate_pool_when_reranking(
     monkeypatch,
 ):
     captured = {}
-
     candidates = [make_hybrid_result()]
 
     def fake_fusion(**kwargs):

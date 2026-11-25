@@ -64,13 +64,25 @@ class EmbeddingService:
         except Exception as exc:
             raise EmbeddingServiceError("Failed to generate text embeddings.") from exc
 
-    def embed_query(self, text: str) -> list[float]:
-        """Generate an embedding for a single search query."""
+    def embed_query(
+        self,
+        text: str,
+        instruction: str | None = None,
+    ) -> list[float]:
+        """Generate an embedding for a query with an optional instruction."""
 
         if not isinstance(text, str) or not text.strip():
             raise ValueError("Query text must be a non-empty string.")
 
-        return self.embed_texts([text])[0]
+        if instruction is not None and not isinstance(instruction, str):
+            raise ValueError("Query instruction must be a string or None.")
+
+        query_text = text
+
+        if instruction:
+            query_text = f"{instruction}{text}"
+
+        return self.embed_texts([query_text])[0]
 
 
 @lru_cache(maxsize=1)
