@@ -1,3 +1,4 @@
+
 import re
 from dataclasses import dataclass
 from math import isfinite
@@ -35,6 +36,18 @@ def tokenize(text: str) -> list[str]:
         r"[a-z0-9]+(?:[-_][a-z0-9]+)*",
         text.lower(),
     )
+
+
+def build_bm25_search_text(
+    section_title: str | None,
+    content: str,
+) -> str:
+    """Combine section metadata and chunk content for lexical matching."""
+
+    if section_title and section_title.strip():
+        return f"{section_title.strip()}\n\n{content}"
+
+    return content
 
 
 def search_bm25(
@@ -100,7 +113,12 @@ def search_bm25(
         filenames = [row[1] for row in rows]
 
         tokenized_corpus = [
-            tokenize(chunk.content)
+            tokenize(
+                build_bm25_search_text(
+                    section_title=chunk.section_title,
+                    content=chunk.content,
+                )
+            )
             for chunk in chunks
         ]
 

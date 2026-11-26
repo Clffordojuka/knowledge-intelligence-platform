@@ -1,3 +1,4 @@
+
 import logging
 from pathlib import Path
 from uuid import UUID
@@ -77,6 +78,7 @@ def process_document(
                 document_id=document.id,
                 chunk_index=chunk.chunk_index,
                 content=chunk.content,
+                section_title=chunk.section_title,
                 page_start=chunk.page_start,
                 page_end=chunk.page_end,
                 char_start=chunk.char_start,
@@ -88,7 +90,9 @@ def process_document(
         db.add_all(persisted_chunks)
 
         document.page_count = extraction.page_count
-        document.extracted_char_count = sum(len(page.text) for page in extraction.pages)
+        document.extracted_char_count = sum(
+            len(page.text) for page in extraction.pages
+        )
         document.status = "completed"
         document.error_message = None
 

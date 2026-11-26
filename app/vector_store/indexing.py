@@ -1,3 +1,4 @@
+
 from dataclasses import dataclass
 from uuid import UUID
 
@@ -30,12 +31,29 @@ class IndexingResult:
     collection_name: str
 
 
+def build_embedding_text(
+    filename: str,
+    section_title: str | None,
+    content: str,
+) -> str:
+    """Add document and section context without modifying source content."""
+
+    parts = [f"Document: {filename}"]
+
+    if section_title and section_title.strip():
+        parts.append(f"Section: {section_title.strip()}")
+
+    parts.append(content)
+
+    return "\n\n".join(parts)
+
+
 def index_document(
     db: Session,
     document_id: UUID,
     client: QdrantClient | None = None,
 ) -> IndexingResult:
-    """Generate embeddings and index a document's chunks in Qdrant."""
+    """Generate enriched embeddings and index a document's chunks in Qdrant."""
 
     document = db.get(Document, document_id)
 
@@ -74,8 +92,16 @@ def index_document(
 
         ensure_collection(qdrant_client)
 
-        texts = [chunk.content for chunk in chunks]
-        embeddings = embedding_service.embed_texts(texts)
+        embedding_texts = [
+            build_embedding_text(
+                filename=document.filename,
+                section_title=getattr(chunk, "section_title", None),
+                content=chunk.content,
+            )
+            for chunk in chunks
+        ]
+
+        embeddings = embedding_service.embed_texts(embedding_texts)
 
         if len(embeddings) != len(chunks):
             raise IndexingError("Embedding count does not match the number of chunks.")
@@ -97,6 +123,7 @@ def index_document(
                         "document_id": str(document.id),
                         "chunk_index": chunk.chunk_index,
                         "filename": document.filename,
+                        "section_title": getattr(chunk, "section_title", None),
                         "content": chunk.content,
                         "page_start": chunk.page_start,
                         "page_end": chunk.page_end,

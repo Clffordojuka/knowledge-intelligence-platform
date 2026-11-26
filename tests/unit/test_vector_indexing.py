@@ -107,7 +107,10 @@ def test_index_document_success(
     assert document.indexing_status == "completed"
 
     embedding_service.embed_texts.assert_called_once_with(
-        [chunk.content for chunk in chunks]
+        [
+           f"Document: {document.filename}\n\n{chunk.content}"
+           for chunk in chunks
+       ]
     )
 
     setup_indexing.assert_called_once_with(qdrant_client)

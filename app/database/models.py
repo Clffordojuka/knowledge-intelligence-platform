@@ -1,3 +1,4 @@
+
 import uuid
 from datetime import datetime
 
@@ -152,6 +153,11 @@ class Chunk(Base):
     content: Mapped[str] = mapped_column(
         Text,
         nullable=False,
+    )
+
+    section_title: Mapped[str | None] = mapped_column(
+        String(255),
+        nullable=True,
     )
 
     page_start: Mapped[int | None] = mapped_column(

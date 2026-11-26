@@ -45,6 +45,7 @@ class TextChunk:
     page_end: int
     char_start: int
     char_end: int
+    section_title: str | None = None
 
 
 @dataclass(frozen=True)
@@ -58,10 +59,11 @@ class _PageSpan:
 
 @dataclass(frozen=True)
 class _SectionSpan:
-    """Character range occupied by a numbered document section."""
+    """Character range and heading of a numbered document section."""
 
     start: int
     end: int
+    title: str
 
 
 PARAGRAPH_BOUNDARY = re.compile(r"\n{2,}")
@@ -191,36 +193,50 @@ def _get_page_range(
 
 def _find_section_spans(text: str) -> list[_SectionSpan]:
     """
-    Identify numbered sections.
+    Identify numbered sections and retain their heading text.
 
     The document title and preamble remain attached to the first
     numbered section. Only headings after the first establish
     new section boundaries.
     """
 
-    heading_positions: list[int] = []
+    headings: list[tuple[int, str]] = []
     current_position = 0
-    first_heading_found = False
 
     for line in text.splitlines(keepends=True):
-        if SECTION_HEADING.match(line.rstrip("\r\n")):
-            if first_heading_found:
-                heading_positions.append(current_position)
-            else:
-                first_heading_found = True
+        heading_text = line.rstrip("\r\n")
+
+        if SECTION_HEADING.match(heading_text):
+            headings.append(
+                (current_position, heading_text.strip())
+            )
 
         current_position += len(line)
 
-    if not first_heading_found:
+    if not headings:
         return []
 
-    boundaries = [0, *heading_positions, len(text)]
+    sections: list[_SectionSpan] = []
 
-    return [
-        _SectionSpan(start=start, end=end)
-        for start, end in zip(boundaries, boundaries[1:])
-        if start < end
-    ]
+    for index, (heading_start, heading_title) in enumerate(headings):
+        section_start = 0 if index == 0 else heading_start
+
+        section_end = (
+            headings[index + 1][0]
+            if index + 1 < len(headings)
+            else len(text)
+        )
+
+        if section_start < section_end:
+            sections.append(
+                _SectionSpan(
+                    start=section_start,
+                    end=section_end,
+                    title=heading_title,
+                )
+            )
+
+    return sections
 
 
 def _append_chunks_for_range(
@@ -230,12 +246,16 @@ def _append_chunks_for_range(
     page_spans: list[_PageSpan],
     config: ChunkingConfig,
     chunks: list[TextChunk],
+    section_title: str | None = None,
 ) -> None:
     """
     Chunk a text range independently.
 
     Overlap is restricted to the current range, preventing chunks
     from inheriting content from an unrelated section.
+
+    Section metadata is propagated to every chunk generated from
+    the same section, including continuation chunks.
     """
 
     start = section_start
@@ -278,6 +298,7 @@ def _append_chunks_for_range(
                     page_end=page_end,
                     char_start=actual_start,
                     char_end=actual_end,
+                    section_title=section_title,
                 )
             )
 
@@ -326,6 +347,7 @@ def chunk_extraction_result(
                     page_spans=page_spans,
                     config=config,
                     chunks=chunks,
+                    section_title=section.title,
                 )
 
             return chunks

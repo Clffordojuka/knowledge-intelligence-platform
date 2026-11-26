@@ -401,3 +401,84 @@ def test_default_strategy_remains_character_based():
     config = ChunkingConfig()
 
     assert config.strategy == "character"
+
+
+def test_section_aware_chunks_capture_section_titles():
+    extraction = make_sectioned_extraction()
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(strategy="section_aware"),
+    )
+
+    assert [chunk.section_title for chunk in chunks] == [
+        "1. Borrower Eligibility",
+        "2. Repayment Capacity",
+        "3. Credit History Review",
+    ]
+
+
+def test_oversized_section_propagates_title_to_continuation_chunks():
+    long_section = (
+        "Detailed repayment capacity requirements must be reviewed "
+        "before approval. "
+    ) * 25
+
+    extraction = make_extraction(
+        (
+            1,
+            "CREDIT POLICY\n\n"
+            "1. Repayment Capacity\n"
+            f"{long_section}",
+        )
+    )
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(
+            chunk_size=150,
+            chunk_overlap=30,
+            strategy="section_aware",
+        ),
+    )
+
+    assert len(chunks) > 1
+
+    assert all(
+        chunk.section_title == "1. Repayment Capacity"
+        for chunk in chunks
+    )
+
+
+def test_character_strategy_does_not_assign_section_titles():
+    extraction = make_sectioned_extraction()
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(strategy="character"),
+    )
+
+    assert chunks
+    assert all(chunk.section_title is None for chunk in chunks)
+
+
+def test_section_aware_fallback_does_not_assign_section_titles():
+    extraction = make_extraction(
+        (
+            1,
+            "Credit policy introduction. "
+            "Borrower eligibility must be assessed. " * 20,
+        )
+    )
+
+    chunks = chunk_extraction_result(
+        extraction,
+        ChunkingConfig(
+            chunk_size=100,
+            chunk_overlap=20,
+            strategy="section_aware",
+        ),
+    )
+
+    assert chunks
+    assert all(chunk.section_title is None for chunk in chunks)
