@@ -27,6 +27,7 @@ class BM25SearchResult:
     filename: str
     page_start: int | None
     page_end: int | None
+    section_title: str | None = None
 
 
 def tokenize(text: str) -> list[str]:
@@ -175,6 +176,7 @@ def search_bm25(
                     filename=valid_filenames[index],
                     page_start=chunk.page_start,
                     page_end=chunk.page_end,
+                    section_title=getattr(chunk, "section_title", None),
                 )
             )
 

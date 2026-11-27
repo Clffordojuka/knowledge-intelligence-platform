@@ -25,6 +25,7 @@ def make_semantic_result(
     chunk_index: int = 0,
     content: str = "Sample policy content.",
     score: float = 0.90,
+    section_title: str | None = None,
 ) -> SearchResult:
     return SearchResult(
         chunk_id=chunk_id or uuid4(),
@@ -35,6 +36,7 @@ def make_semantic_result(
         filename="credit_policy.txt",
         page_start=1,
         page_end=2,
+        section_title=section_title,
     )
 
 
@@ -44,6 +46,7 @@ def make_bm25_result(
     chunk_index: int = 0,
     content: str = "Sample policy content.",
     score: float = 4.5,
+    section_title: str | None = None,
 ) -> BM25SearchResult:
     return BM25SearchResult(
         chunk_id=chunk_id or uuid4(),
@@ -54,6 +57,7 @@ def make_bm25_result(
         filename="credit_policy.txt",
         page_start=1,
         page_end=2,
+        section_title=section_title,
     )
 
 
@@ -62,6 +66,9 @@ def make_hybrid_result(
     document_id: UUID | None = None,
     content: str = "Sample policy content.",
     rrf_score: float = 0.03,
+    semantic_score: float | None = 0.90,
+    bm25_score: float | None = 4.5,
+    section_title: str | None = None,
 ) -> HybridSearchResult:
     return HybridSearchResult(
         chunk_id=chunk_id or uuid4(),
@@ -72,8 +79,9 @@ def make_hybrid_result(
         page_start=1,
         page_end=2,
         rrf_score=rrf_score,
-        semantic_score=0.90,
-        bm25_score=4.5,
+        semantic_score=semantic_score,
+        bm25_score=bm25_score,
+        section_title=section_title,
     )
 
 
@@ -714,3 +722,39 @@ def test_hybrid_search_returns_empty_results_when_reranking_empty_candidates(
     )
 
     assert results == []
+
+def test_hybrid_search_preserves_section_metadata(monkeypatch):
+    chunk_id = uuid4()
+    document_id = uuid4()
+    section_title = "2. Credit Assessment"
+
+    semantic_result = make_semantic_result(
+        chunk_id=chunk_id,
+        document_id=document_id,
+        section_title=section_title,
+    )
+
+    bm25_result = make_bm25_result(
+        chunk_id=chunk_id,
+        document_id=document_id,
+        section_title=section_title,
+    )
+
+    monkeypatch.setattr(
+        hybrid_search,
+        "search_similar_chunks",
+        lambda **kwargs: [semantic_result],
+    )
+    monkeypatch.setattr(
+        hybrid_search,
+        "search_bm25",
+        lambda **kwargs: [bm25_result],
+    )
+
+    results = search_hybrid_chunks(
+        db=object(),
+        query="credit assessment requirements",
+    )
+
+    assert len(results) == 1
+    assert results[0].section_title == section_title

@@ -1,3 +1,4 @@
+
 from dataclasses import dataclass
 from math import isfinite
 from uuid import UUID
@@ -35,6 +36,7 @@ class SearchResult:
     filename: str | None
     page_start: int | None
     page_end: int | None
+    section_title: str | None = None
 
 
 def _build_document_filter(
@@ -78,6 +80,7 @@ def _parse_search_result(point: ScoredPoint) -> SearchResult:
         document_id = UUID(str(payload["document_id"]))
         chunk_index = payload["chunk_index"]
         content = payload["content"]
+        section_title = payload.get("section_title")
 
         if isinstance(chunk_index, bool) or not isinstance(chunk_index, int):
             raise ValueError("Chunk index must be an integer.")
@@ -87,6 +90,12 @@ def _parse_search_result(point: ScoredPoint) -> SearchResult:
 
         if not isinstance(content, str) or not content.strip():
             raise ValueError("Chunk content must be a non-empty string.")
+
+        if section_title is not None:
+            if not isinstance(section_title, str):
+                raise ValueError("Section title must be a string or None.")
+
+            section_title = section_title.strip() or None
 
         score = float(point.score)
 
@@ -102,6 +111,7 @@ def _parse_search_result(point: ScoredPoint) -> SearchResult:
             filename=payload.get("filename"),
             page_start=payload.get("page_start"),
             page_end=payload.get("page_end"),
+            section_title=section_title,
         )
 
     except (KeyError, TypeError, ValueError) as exc:
@@ -177,7 +187,6 @@ def search_similar_chunks(
         normalized_query = query.strip()
 
         if query_instruction is None:
-            # Preserve the original embedding call by default.
             query_vector = embedder.embed_query(normalized_query)
         else:
             query_vector = embedder.embed_query(

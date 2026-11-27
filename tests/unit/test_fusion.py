@@ -17,6 +17,7 @@ def make_semantic_result(
     chunk_index=0,
     content="Sample document content.",
     score=0.90,
+    section_title=None,
 ):
     """Create a semantic retrieval result."""
 
@@ -29,6 +30,7 @@ def make_semantic_result(
         filename="credit_policy.txt",
         page_start=1,
         page_end=2,
+        section_title=section_title,
     )
 
 
@@ -38,6 +40,7 @@ def make_bm25_result(
     chunk_index=0,
     content="Sample document content.",
     score=4.5,
+    section_title=None,
 ):
     """Create a BM25 retrieval result."""
 
@@ -50,6 +53,7 @@ def make_bm25_result(
         filename="credit_policy.txt",
         page_start=1,
         page_end=2,
+        section_title=section_title,
     )
 
 
@@ -432,3 +436,73 @@ def test_fusion_preserves_result_provenance():
     assert result.filename == "credit_policy.txt"
     assert result.page_start == 1
     assert result.page_end == 2
+
+def test_fusion_preserves_section_title():
+    document_id = uuid4()
+    chunk_id = uuid4()
+    section_title = "2. Credit Assessment"
+
+    semantic = [
+        make_semantic_result(
+            chunk_id=chunk_id,
+            document_id=document_id,
+            section_title=section_title,
+        )
+    ]
+
+    bm25 = [
+        make_bm25_result(
+            chunk_id=chunk_id,
+            document_id=document_id,
+            section_title=section_title,
+        )
+    ]
+
+    results = reciprocal_rank_fusion(semantic, bm25)
+
+    assert len(results) == 1
+    assert results[0].section_title == section_title
+
+
+def test_fusion_preserves_section_title_from_semantic_only_result():
+    result = make_semantic_result(
+        section_title="3. Repayment Capacity"
+    )
+
+    fused = reciprocal_rank_fusion([result], [])
+
+    assert fused[0].section_title == "3. Repayment Capacity"
+
+
+def test_fusion_preserves_section_title_from_bm25_only_result():
+    result = make_bm25_result(
+        section_title="4. Approval Process"
+    )
+
+    fused = reciprocal_rank_fusion([], [result])
+
+    assert fused[0].section_title == "4. Approval Process"
+
+
+def test_fusion_rejects_conflicting_section_titles():
+    chunk_id = uuid4()
+    document_id = uuid4()
+
+    semantic = [
+        make_semantic_result(
+            chunk_id=chunk_id,
+            document_id=document_id,
+            section_title="2. Credit Assessment",
+        )
+    ]
+
+    bm25 = [
+        make_bm25_result(
+            chunk_id=chunk_id,
+            document_id=document_id,
+            section_title="3. Repayment Capacity",
+        )
+    ]
+
+    with pytest.raises(FusionError, match="Conflicting section titles"):
+        reciprocal_rank_fusion(semantic, bm25)

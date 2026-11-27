@@ -54,24 +54,30 @@ def make_point(
     chunk_index=0,
     content="A sample document chunk.",
     score=0.85,
+    section_title=None,
 ):
     """Create a Qdrant-like scored point."""
 
     document_id = document_id or uuid4()
     chunk_id = chunk_id or uuid4()
 
+    payload = {
+        "chunk_id": str(chunk_id),
+        "document_id": str(document_id),
+        "chunk_index": chunk_index,
+        "content": content,
+        "filename": "credit_policy.txt",
+        "page_start": 1,
+        "page_end": 2,
+    }
+
+    if section_title is not None:
+        payload["section_title"] = section_title
+
     return SimpleNamespace(
         id=str(chunk_id),
         score=score,
-        payload={
-            "chunk_id": str(chunk_id),
-            "document_id": str(document_id),
-            "chunk_index": chunk_index,
-            "content": content,
-            "filename": "credit_policy.txt",
-            "page_start": 1,
-            "page_end": 2,
-        },
+        payload=payload,
     )
 
 
@@ -96,6 +102,7 @@ def test_successful_semantic_search(embedding_service, qdrant_client):
             chunk_index=2,
             content="Credit approval requirements.",
             score=0.91,
+            section_title="Credit Approval Requirements",
         )
     ]
 
@@ -119,6 +126,7 @@ def test_successful_semantic_search(embedding_service, qdrant_client):
     assert result.filename == "credit_policy.txt"
     assert result.page_start == 1
     assert result.page_end == 2
+    assert result.section_title == "Credit Approval Requirements"
 
     assert embedding_service.received_query == (
         "What are the credit approval requirements?"
@@ -404,3 +412,51 @@ def test_semantic_search_rejects_wrong_embedding_dimension(
         )
 
     assert qdrant_client.received_arguments is None
+
+def test_semantic_search_supports_legacy_payload_without_section_title(
+    embedding_service,
+    qdrant_client,
+):
+    qdrant_client.points = [make_point()]
+
+    results = search_similar_chunks(
+        query="Find policy information",
+        client=qdrant_client,
+        embedding_service=embedding_service,
+    )
+
+    assert len(results) == 1
+    assert results[0].section_title is None
+
+
+def test_semantic_search_normalizes_section_title(
+    embedding_service,
+    qdrant_client,
+):
+    qdrant_client.points = [
+        make_point(section_title="  2. Credit Assessment  ")
+    ]
+
+    results = search_similar_chunks(
+        query="Find policy information",
+        client=qdrant_client,
+        embedding_service=embedding_service,
+    )
+
+    assert results[0].section_title == "2. Credit Assessment"
+
+
+def test_semantic_search_rejects_invalid_section_title(
+    embedding_service,
+    qdrant_client,
+):
+    point = make_point()
+    point.payload["section_title"] = 123
+    qdrant_client.points = [point]
+
+    with pytest.raises(RetrievalError, match="Invalid Qdrant result payload"):
+        search_similar_chunks(
+            query="Find policy information",
+            client=qdrant_client,
+            embedding_service=embedding_service,
+        )

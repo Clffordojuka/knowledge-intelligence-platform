@@ -1,3 +1,4 @@
+
 from dataclasses import dataclass
 from math import isfinite
 from uuid import UUID
@@ -24,6 +25,7 @@ class HybridSearchResult:
     rrf_score: float
     semantic_score: float | None
     bm25_score: float | None
+    section_title: str | None = None
 
 
 def reciprocal_rank_fusion(
@@ -64,7 +66,9 @@ def reciprocal_rank_fusion(
                 raise FusionError("Unsupported retrieval result type.")
 
             if result.chunk_id in seen_chunk_ids:
-                raise FusionError("A retrieval ranking contains duplicate chunk IDs.")
+                raise FusionError(
+                    "A retrieval ranking contains duplicate chunk IDs."
+                )
 
             seen_chunk_ids.add(result.chunk_id)
 
@@ -78,6 +82,9 @@ def reciprocal_rank_fusion(
                     "rrf_score": 0.0,
                     "semantic_score": None,
                     "bm25_score": None,
+                    "section_title": getattr(
+                        result, "section_title", None
+                    ),
                 },
             )
 
@@ -88,10 +95,26 @@ def reciprocal_rank_fusion(
                 or existing.chunk_index != result.chunk_index
                 or existing.content != result.content
             ):
-                raise FusionError("Conflicting metadata for the same chunk ID.")
+                raise FusionError(
+                    "Conflicting metadata for the same chunk ID."
+                )
+
+            incoming_title = getattr(result, "section_title", None)
+            existing_title = entry["section_title"]
+
+            if (
+                existing_title is not None
+                and incoming_title is not None
+                and existing_title != incoming_title
+            ):
+                raise FusionError(
+                    "Conflicting section titles for the same chunk ID."
+                )
+
+            if existing_title is None and incoming_title is not None:
+                entry["section_title"] = incoming_title
 
             entry["rrf_score"] += 1.0 / (k + rank)
-
             entry[f"{retrieval_type}_score"] = float(result.score)
 
     ranked_entries = sorted(
@@ -119,6 +142,7 @@ def reciprocal_rank_fusion(
                 rrf_score=entry["rrf_score"],
                 semantic_score=entry["semantic_score"],
                 bm25_score=entry["bm25_score"],
+                section_title=entry["section_title"],
             )
         )
 
